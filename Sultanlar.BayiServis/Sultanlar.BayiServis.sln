@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31424.327
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sultanlar.BayiServis", "Sultanlar.BayiServis\Sultanlar.BayiServis.csproj", "{0CEAA129-50C9-43E1-9A17-BD0D90109092}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0CEAA129-50C9-43E1-9A17-BD0D90109092}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CEAA129-50C9-43E1-9A17-BD0D90109092}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CEAA129-50C9-43E1-9A17-BD0D90109092}.Debug|x86.ActiveCfg = Debug|x86
+		{0CEAA129-50C9-43E1-9A17-BD0D90109092}.Debug|x86.Build.0 = Debug|x86
+		{0CEAA129-50C9-43E1-9A17-BD0D90109092}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CEAA129-50C9-43E1-9A17-BD0D90109092}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0CEAA129-50C9-43E1-9A17-BD0D90109092}.Release|x86.ActiveCfg = Release|x86
+		{0CEAA129-50C9-43E1-9A17-BD0D90109092}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D697AE5A-49AD-4CC3-B854-956F8D62F1AC}
+	EndGlobalSection
+EndGlobal
