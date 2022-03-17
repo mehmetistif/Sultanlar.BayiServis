@@ -9,7 +9,6 @@ using System.Xml;
 using System.ServiceModel.Web;
 using System.Collections;
 using System.IO;
-using System.Data.SQLite;
 using System.Xml.Serialization;
 using System.Drawing;
 using System.IdentityModel.Selectors;
