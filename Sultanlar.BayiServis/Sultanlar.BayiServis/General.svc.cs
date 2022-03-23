@@ -64,6 +64,14 @@ namespace Sultanlar.BayiServis
             }
 
             dt = WCFdata(connString, "SELECT * FROM [" + ViewName + "] ", paramn, paramv);
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                for (int j = 0; j < dt.Columns.Count; j++)
+                {
+                    if (dt.Columns[j].DataType == typeof(string) && dt.Rows[i][j].ToString() == "")
+                        dt.Rows[i][j] = "";
+                }
+            }
             ds.Tables.Add(dt);
             donendeger.LoadXml(ds.GetXml());
 
