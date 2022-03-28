@@ -44,20 +44,21 @@ namespace Sultanlar.ClassLib
             querySatis = QuerySatis + " WHERE " + YilAd + " = " + Yil + " AND " + AyAd + " >= " + (Ay - 3).ToString();
         }
 
-        public string GetData(bool satis, bool servis)
+        public string GetData(bool satis)
         {
             SqlConnection conn = new SqlConnection("Server=" + server + "; Database=" + database + "; User Id=" + userid + "; Password=" + password + "; Trusted_Connection=False;");
             SqlDataAdapter da = new SqlDataAdapter(satis ? querySatis : queryStok, conn);
             DataSet ds = new DataSet();
             da.Fill(ds);
-            string donendeger = Export(ds, satis, servis);
+            string donendeger = Export(ds, satis);
 
-            ev.WriteEntry(donendeger != "" ? "veri gönderildi" : "veri gönderilemedi", EventLogEntryType.Information);
+            string sat = satis ? "Satış" : "Stok";
+            ev.WriteEntry(donendeger != "" ? sat + " verisi gönderildi." : sat + " verisi gönderilemedi.", EventLogEntryType.Information);
 
             return donendeger;
         }
 
-        private string Export(DataSet ds, bool satis, bool servis)
+        private string Export(DataSet ds, bool satis)
         {
             try
             {

@@ -50,6 +50,7 @@ namespace Sultanlar.BayiWinApp
             textBox8.Text = config.GetElementsByTagName("yil")[0].InnerText;
             textBox11.Text = config.GetElementsByTagName("ayad")[0].InnerText;
             textBox9.Text = config.GetElementsByTagName("ay")[0].InnerText;
+            label8.Text = "Son gönderim: " + config.GetElementsByTagName("lastSent")[0].InnerText;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -150,7 +151,7 @@ namespace Sultanlar.BayiWinApp
             string query = textBox6.Text.Trim();
             Class1 cls = new Class1(ev, textBox1.Text.Trim(), textBox2.Text.Trim(), textBox3.Text.Trim(), textBox4.Text.Trim(), textBox5.Text.Trim(), query, textBox7.Text.Trim(),
                 textBox10.Text.Trim(), Convert.ToInt32(textBox8.Text.Trim()), textBox11.Text.Trim(), Convert.ToInt32(textBox9.Text.Trim()));
-            MessageBox.Show(cls.GetData(true, false));
+            MessageBox.Show(cls.GetData(true));
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -158,7 +159,7 @@ namespace Sultanlar.BayiWinApp
             string query = textBox7.Text.Trim();
             Class1 cls = new Class1(ev, textBox1.Text.Trim(), textBox2.Text.Trim(), textBox3.Text.Trim(), textBox4.Text.Trim(), textBox5.Text.Trim(), textBox6.Text.Trim(), query,
                 textBox10.Text.Trim(), Convert.ToInt32(textBox8.Text.Trim()), textBox11.Text.Trim(), Convert.ToInt32(textBox9.Text.Trim()));
-            MessageBox.Show(cls.GetData(false, false));
+            MessageBox.Show(cls.GetData(false));
         }
 
         private void button4_Click(object sender, EventArgs e)

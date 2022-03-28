@@ -24,6 +24,8 @@ namespace Sultanlar.BayiWinServis
         Timer tmr;
         Class1 cls;
         EventLog ev;
+        XmlDocument config;
+        string configPath;
 
         string bayikod;
         string server;
@@ -39,8 +41,9 @@ namespace Sultanlar.BayiWinServis
 
         protected override void OnStart(string[] args)
         {
-            XmlDocument config = new XmlDocument();
-            config.Load(Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location) + "\\config.xml");
+            configPath = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+            config = new XmlDocument();
+            config.Load(configPath + "\\config.xml");
 
             bayikod = config.GetElementsByTagName("bayikod")[0].InnerText;
             server = config.GetElementsByTagName("server")[0].InnerText;
@@ -58,7 +61,7 @@ namespace Sultanlar.BayiWinServis
             ev.Source = "Sultanlar Bayii Servis";
             cls = new Class1(ev, bayikod, server, database, userid, password, querySatis, queryStok, yilAd, DateTime.Now.Year, ayAd, DateTime.Now.Month);
 
-            tmr = new Timer(3600000);
+            tmr = new Timer(300000);
             tmr.Elapsed += Tmr_Elapsed;
             tmr.Enabled = true;
             tmr.Start();
@@ -66,11 +69,33 @@ namespace Sultanlar.BayiWinServis
 
         private void Tmr_Elapsed(object sender, ElapsedEventArgs e)
         {
-            if (DateTime.Now.Hour == 10 || DateTime.Now.Hour == 12 || DateTime.Now.Hour == 14 || DateTime.Now.Hour == 16 || DateTime.Now.Hour == 18 || DateTime.Now.Hour == 20)
+            DateTime sonGonderim = Convert.ToDateTime(config.GetElementsByTagName("lastSent")[0].InnerText);
+            if (sonGonderim.ToShortDateString() == DateTime.Now.ToShortDateString()) // bugün gönderilmişse
             {
-                cls.GetData(true, true);
-                cls.GetData(false, true);
+                if ((DateTime.Now.Hour == 10 || DateTime.Now.Hour == 12 || DateTime.Now.Hour == 14 || DateTime.Now.Hour == 16 || DateTime.Now.Hour == 18 || DateTime.Now.Hour == 20)
+                    && sonGonderim.Hour != DateTime.Now.Hour)
+                {
+                    Gonder();
+                }
             }
+            else
+            {
+                Gonder();
+            }
+        }
+
+        private void Gonder()
+        {
+            string satis = cls.GetData(true);
+            string stok = cls.GetData(false);
+            if (satis == string.Empty && stok == string.Empty) // satış ve stok gönderilemedi
+            {
+                return;
+            }
+
+            // ikisinden birisi gönderildiyse
+            config.GetElementsByTagName("lastSent")[0].InnerText = DateTime.Now.ToString();
+            config.Save(configPath + "\\config.xml");
         }
 
         protected override void OnStop()
