@@ -40,6 +40,7 @@ namespace Sultanlar.BayiWinServis
             // serviceInstaller1
             // 
             this.serviceInstaller1.ServiceName = "Sultanlar Bayii Servis";
+            this.serviceInstaller1.StartType = System.ServiceProcess.ServiceStartMode.Automatic;
             // 
             // ProjectInstaller
             // 

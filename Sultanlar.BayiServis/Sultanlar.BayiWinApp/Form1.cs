@@ -24,8 +24,11 @@ namespace Sultanlar.BayiWinApp
         }
 
         XmlDocument config;
+        EventLog ev;
         private void Form1_Load(object sender, EventArgs e)
         {
+            ev = new EventLog();
+            ev.Source = "Sultanlar Bayii App";
             /*Process prs = new Process();
             ProcessStartInfo startInfo = new ProcessStartInfo();
             startInfo.FileName = "cmd.exe";
@@ -71,7 +74,7 @@ namespace Sultanlar.BayiWinApp
         {
             if (IsServiceInstalled(serviceName))
             {
-                if (MessageBox.Show("Servis zaten kurulmuş. Kaldırmak istiyor musunuz?", "Uyarı", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                if (MessageBox.Show("Servis zaten kurulmuş. Kaldırıp tekrar kurmak istiyor musunuz?", "Uyarı", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     Install(assembly, false);
                 }
@@ -145,7 +148,7 @@ namespace Sultanlar.BayiWinApp
         private void button2_Click(object sender, EventArgs e)
         {
             string query = textBox6.Text.Trim();
-            Class1 cls = new Class1("Sultanlar Bayii Servis", textBox1.Text.Trim(), textBox2.Text.Trim(), textBox3.Text.Trim(), textBox4.Text.Trim(), textBox5.Text.Trim(), query, textBox7.Text.Trim(),
+            Class1 cls = new Class1(ev, textBox1.Text.Trim(), textBox2.Text.Trim(), textBox3.Text.Trim(), textBox4.Text.Trim(), textBox5.Text.Trim(), query, textBox7.Text.Trim(),
                 textBox10.Text.Trim(), Convert.ToInt32(textBox8.Text.Trim()), textBox11.Text.Trim(), Convert.ToInt32(textBox9.Text.Trim()));
             MessageBox.Show(cls.GetData(true, false));
         }
@@ -153,7 +156,7 @@ namespace Sultanlar.BayiWinApp
         private void button3_Click(object sender, EventArgs e)
         {
             string query = textBox7.Text.Trim();
-            Class1 cls = new Class1("Sultanlar Bayii Servis", textBox1.Text.Trim(), textBox2.Text.Trim(), textBox3.Text.Trim(), textBox4.Text.Trim(), textBox5.Text.Trim(), textBox6.Text.Trim(), query,
+            Class1 cls = new Class1(ev, textBox1.Text.Trim(), textBox2.Text.Trim(), textBox3.Text.Trim(), textBox4.Text.Trim(), textBox5.Text.Trim(), textBox6.Text.Trim(), query,
                 textBox10.Text.Trim(), Convert.ToInt32(textBox8.Text.Trim()), textBox11.Text.Trim(), Convert.ToInt32(textBox9.Text.Trim()));
             MessageBox.Show(cls.GetData(false, false));
         }
@@ -170,6 +173,48 @@ namespace Sultanlar.BayiWinApp
             startInfo.Verb = "runas";
             process.StartInfo = startInfo;
             process.Start();*/
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ServiceController service = new ServiceController("Sultanlar Bayii Servis");
+                if (service.Status == ServiceControllerStatus.Stopped || service.Status == ServiceControllerStatus.StopPending)
+                {
+                    service.Start();
+                    MessageBox.Show("Başlatıldı.");
+                }
+                else
+                {
+                    MessageBox.Show("Servis durumu: " + service.Status.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ServiceController service = new ServiceController("Sultanlar Bayii Servis");
+                if (service.Status == ServiceControllerStatus.Running)
+                {
+                    service.Stop();
+                    MessageBox.Show("Durduruldu.");
+                }
+                else
+                {
+                    MessageBox.Show("Servis durumu: " + service.Status.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 }

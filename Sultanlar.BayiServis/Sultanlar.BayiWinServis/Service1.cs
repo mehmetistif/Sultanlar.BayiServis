@@ -23,6 +23,7 @@ namespace Sultanlar.BayiWinServis
 
         Timer tmr;
         Class1 cls;
+        EventLog ev;
 
         string bayikod;
         string server;
@@ -39,7 +40,7 @@ namespace Sultanlar.BayiWinServis
         protected override void OnStart(string[] args)
         {
             XmlDocument config = new XmlDocument();
-            config.Load("config.xml");
+            config.Load(Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location) + "\\config.xml");
 
             bayikod = config.GetElementsByTagName("bayikod")[0].InnerText;
             server = config.GetElementsByTagName("server")[0].InnerText;
@@ -53,8 +54,9 @@ namespace Sultanlar.BayiWinServis
             ayAd = config.GetElementsByTagName("ayad")[0].InnerText;
             //ay = config.GetElementsByTagName("ay")[0].InnerText;
 
-            cls = new Class1("Sultanlar - Bayi Servis", bayikod, server, database, userid, password, querySatis, queryStok, yilAd, DateTime.Now.Year, ayAd, DateTime.Now.Month);
-            EventLog.WriteEntry(cls.logHead, "başladı");
+            ev = new EventLog();
+            ev.Source = "Sultanlar Bayii Servis";
+            cls = new Class1(ev, bayikod, server, database, userid, password, querySatis, queryStok, yilAd, DateTime.Now.Year, ayAd, DateTime.Now.Month);
 
             tmr = new Timer(3600000);
             tmr.Elapsed += Tmr_Elapsed;
@@ -73,7 +75,7 @@ namespace Sultanlar.BayiWinServis
 
         protected override void OnStop()
         {
-            EventLog.WriteEntry(cls.logHead, "durduruldu");
+
         }
     }
 }

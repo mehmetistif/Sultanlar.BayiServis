@@ -12,7 +12,7 @@ namespace Sultanlar.ClassLib
 {
     public class Class1
     {
-        public string logHead;
+        EventLog ev;
         private string bayikod;
         private string server;
         private string database;
@@ -25,9 +25,10 @@ namespace Sultanlar.ClassLib
         private string ayad;
         private int ay;
 
-        public Class1(string LogHead, string Bayikod, string Server, string Database, string Userid, string Password, string QuerySatis, string QueryStok, string YilAd, int Yil, string AyAd, int Ay)
+        public Class1(EventLog Ev, string Bayikod, string Server, string Database, string Userid, string Password, string QuerySatis, string QueryStok, string YilAd, int Yil, string AyAd, int Ay)
         {
-            logHead = LogHead;
+            ev = Ev;
+
             server = Server;
             bayikod = Bayikod;
             database = Database;
@@ -51,8 +52,7 @@ namespace Sultanlar.ClassLib
             da.Fill(ds);
             string donendeger = Export(ds, satis, servis);
 
-            if (servis)
-                EventLog.WriteEntry(logHead, donendeger != "" ? "veri gönderildi" : "veri gönderilemedi");
+            ev.WriteEntry(donendeger != "" ? "veri gönderildi" : "veri gönderilemedi", EventLogEntryType.Information);
 
             return donendeger;
         }
@@ -84,8 +84,7 @@ namespace Sultanlar.ClassLib
             }
             catch (Exception ex)
             {
-                if (servis)
-                    EventLog.WriteEntry(logHead, ex.Message);
+                ev.WriteEntry(ex.Message, EventLogEntryType.Information);
                 return "";
             }
 
