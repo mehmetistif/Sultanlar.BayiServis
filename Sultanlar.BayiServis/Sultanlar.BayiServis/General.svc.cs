@@ -119,6 +119,18 @@ namespace Sultanlar.BayiServis
 
             return dt;
         }
+        public XmlDocument PostXml(XmlDocument icerik, string Bayikod, string Satis, string YilAd, string Yil, string AyAd, string Ay)
+        {
+            XmlDocument donendeger = new XmlDocument();
+
+            string xml = icerik.OuterXml;
+            DataSet ds = new DataSet();
+            ds.ReadXml(new MemoryStream(Encoding.UTF8.GetBytes(xml)));
+            DataTable dt = ds.Tables[0];
+                donendeger.LoadXml("<?xml version=\"1.0\" encoding=\"utf - 8\"?><sonuc><basarili>true</basarili></sonuc>");
+
+            return donendeger;
+        }
     }
 
     public class ServiceAuthenticator : UserNamePasswordValidator

@@ -24,5 +24,9 @@ namespace Sultanlar.BayiServis
         [OperationContract, XmlSerializerFormat]
         [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Xml, UriTemplate = "/Get?server={Server}&database={Database}&user={User}&password={Password}&viewname={ViewName}&paramn={ParamNames}&paramv={ParamValues}")]
         XmlDocument GetView(string Server, string Database, string User, string Password, string ViewName, string ParamNames, string ParamValues);
+
+        [OperationContract, XmlSerializerFormat]
+        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Xml, ResponseFormat = WebMessageFormat.Xml, UriTemplate = "/Post?bayikod={Bayikod}&satis={Satis}&yilad={YilAd}&yil={Yil}&ayad={AyAd}&ay={Ay}")]
+        XmlDocument PostXml(XmlDocument icerik, string Bayikod, string Satis, string YilAd, string Yil, string AyAd, string Ay);
     }
 }
