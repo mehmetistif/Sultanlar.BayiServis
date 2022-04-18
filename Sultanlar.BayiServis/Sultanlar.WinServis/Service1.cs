@@ -61,7 +61,7 @@ namespace Sultanlar.WinServis
 
             bool yazildi = DisVeri.TabloYaz(tabloadi, dt, "", "", "", "", false);
 
-            SAPs.BayiLogYaz("bayi dis servis sql Satis", yazildi, "1071593 nolu bayi " + DateTime.Now.Year.ToString() + "-" + DateTime.Now.Month.ToString() + " dönemi. Gelen satır: " + report.Items.Length.ToString(), baslangic, DateTime.Now);
+            SAPs.BayiLogYaz("bayi dis servis Satis", yazildi, "1071593 nolu bayi " + DateTime.Now.Year.ToString() + "-" + DateTime.Now.Month.ToString() + " dönemi. Gelen satır: " + report.Items.Length.ToString(), baslangic, DateTime.Now);
 
             return yazildi;
         }
