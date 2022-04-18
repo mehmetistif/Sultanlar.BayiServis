@@ -32,9 +32,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Sultanlar.DatabaseObject">
-      <HintPath>..\..\..\Sultanlar\Sultanlar\Sultanlar.DatabaseObject\bin\Debug\Sultanlar.DatabaseObject.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
@@ -101,6 +98,12 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Sultanlar.ClassLib\Sultanlar.ClassLib.csproj">
+      <Project>{cdd8d5f8-a6db-4205-aa85-2385c194d24b}</Project>
+      <Name>Sultanlar.ClassLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

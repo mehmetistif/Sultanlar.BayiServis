@@ -1,4 +1,4 @@
-﻿using Sultanlar.DatabaseObject.Internet;
+﻿using Sultanlar.ClassLib;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -20,9 +20,13 @@ namespace Sultanlar.WinServis
         }
 
         Timer tmr;
+        EventLog ev;
 
         protected override void OnStart(string[] args)
         {
+            ev = new EventLog();
+            ev.Source = "Sultanlar Bayi In Servis";
+
             tmr = new Timer(3600000);
             tmr.Elapsed += Tmr_Elapsed;
             tmr.Enabled = true;
@@ -33,77 +37,9 @@ namespace Sultanlar.WinServis
         {
             if (DateTime.Now.Hour == 10 || DateTime.Now.Hour == 12 || DateTime.Now.Hour == 14 || DateTime.Now.Hour == 16 || DateTime.Now.Hour == 18 || DateTime.Now.Hour == 20)
             {
-                KaanGonder();
+                Class1 cls = new Class1(ev, "1071593");
+                cls.KaanGonder();
             }
-        }
-
-        private bool KaanGonder()
-        {
-            DateTime baslangic = DateTime.Now;
-            string Bayikod = "1071593";
-
-            int ikiayonce = DateTime.Now.AddMonths(-2).Month;
-            DateTime dtBas = Convert.ToDateTime(DateTime.Now.Year.ToString() + "." + (ikiayonce < 1 ? "1" : ikiayonce.ToString()) + ".1");
-            DateTime dtBit = DateTime.Now;
-
-            KaanGida.Service1SoapClient scl = new KaanGida.Service1SoapClient();
-            KaanGida.Authentication auth = new KaanGida.Authentication();
-            auth.username = "sultanlar";
-            auth.password = "Sn80C3REN";
-            KaanGida.resultB2BSatisRapor report = scl.SultanlarRapor(auth, dtBas, dtBit);
-
-            DataTable dt = CopyGenericToDataTable(report.Items, new ArrayList() { "ExtensionData" });
-
-            string tabloadi = "tbl_" + Bayikod + "_Satis";
-
-            if (!DisVeri.ExecNQwp("DELETE FROM " + tabloadi + " WHERE CONVERT(datetime, FATURATARIHI, 104) >= @FATURATARIHI", new ArrayList() { "FATURATARIHI" }, new object[] { dtBas }))
-                return false;
-
-            bool yazildi = DisVeri.TabloYaz(tabloadi, dt, "", "", "", "", false);
-
-            SAPs.BayiLogYaz("bayi dis servis Satis", yazildi, "1071593 nolu bayi " + DateTime.Now.Year.ToString() + "-" + DateTime.Now.Month.ToString() + " dönemi. Gelen satır: " + report.Items.Length.ToString(), baslangic, DateTime.Now);
-
-            return yazildi;
-        }
-
-        private DataTable CopyGenericToDataTable<T>(IEnumerable<T> items, ArrayList excludeProps)
-        {
-            var properties = typeof(T).GetProperties();
-            var result = new DataTable();
-
-            //Build the columns
-            foreach (var prop in properties)
-            {
-                for (int i = 0; i < excludeProps.Count; i++)
-                {
-                    if (prop.Name != excludeProps[i].ToString())
-                    {
-                        result.Columns.Add(prop.Name); //, prop.PropertyType
-                    }
-                }
-            }
-
-            //Fill the DataTable
-            foreach (var item in items)
-            {
-                var row = result.NewRow();
-
-                foreach (var prop in properties)
-                {
-                    for (int i = 0; i < excludeProps.Count; i++)
-                    {
-                        if (prop.Name != excludeProps[i].ToString())
-                        {
-                            var itemValue = prop.GetValue(item, new object[] { });
-                            row[prop.Name] = itemValue;
-                        }
-                    }
-                }
-
-                result.Rows.Add(row);
-            }
-
-            return result;
         }
 
         protected override void OnStop()
