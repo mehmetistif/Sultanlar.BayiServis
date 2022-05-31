@@ -223,5 +223,11 @@ namespace Sultanlar.BayiWinApp
             Class1 cls = new Class1(ev, "1071593");
             cls.KaanGonder();
         }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            Class1 cls = new Class1(ev, "1071593");
+            cls.KaanStokGonder();
+        }
     }
 }

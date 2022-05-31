@@ -60,6 +60,43 @@
           <s:element minOccurs="1" maxOccurs="1" name="SATISNETFIYAT" type="s:decimal" />
         </s:sequence>
       </s:complexType>
+      <s:element name="SultanlarDepoDurum">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="auth" type="tns:Authentication" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SultanlarDepoDurumResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SultanlarDepoDurumResult" type="tns:resultB2BDepoRapor" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="resultB2BDepoRapor">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:classResult">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="MerkezDepo" type="tns:ArrayOfUrun" />
+              <s:element minOccurs="0" maxOccurs="1" name="IadeDepo" type="tns:ArrayOfUrun" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="ArrayOfUrun">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Urun" nillable="true" type="tns:Urun" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Urun">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="SAPKOD" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="BARKOD" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ISIM" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="MIKTAR" type="s:long" />
+        </s:sequence>
+      </s:complexType>
     </s:schema>
   </wsdl:types>
   <wsdl:message name="SultanlarRaporSoapIn">
@@ -68,10 +105,20 @@
   <wsdl:message name="SultanlarRaporSoapOut">
     <wsdl:part name="parameters" element="tns:SultanlarRaporResponse" />
   </wsdl:message>
+  <wsdl:message name="SultanlarDepoDurumSoapIn">
+    <wsdl:part name="parameters" element="tns:SultanlarDepoDurum" />
+  </wsdl:message>
+  <wsdl:message name="SultanlarDepoDurumSoapOut">
+    <wsdl:part name="parameters" element="tns:SultanlarDepoDurumResponse" />
+  </wsdl:message>
   <wsdl:portType name="Service1Soap">
     <wsdl:operation name="SultanlarRapor">
       <wsdl:input message="tns:SultanlarRaporSoapIn" />
       <wsdl:output message="tns:SultanlarRaporSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SultanlarDepoDurum">
+      <wsdl:input message="tns:SultanlarDepoDurumSoapIn" />
+      <wsdl:output message="tns:SultanlarDepoDurumSoapOut" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="Service1Soap" type="tns:Service1Soap">
@@ -85,11 +132,29 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="SultanlarDepoDurum">
+      <soap:operation soapAction="http://tempuri.org/SultanlarDepoDurum" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:binding name="Service1Soap12" type="tns:Service1Soap">
     <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
     <wsdl:operation name="SultanlarRapor">
       <soap12:operation soapAction="http://tempuri.org/SultanlarRapor" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SultanlarDepoDurum">
+      <soap12:operation soapAction="http://tempuri.org/SultanlarDepoDurum" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

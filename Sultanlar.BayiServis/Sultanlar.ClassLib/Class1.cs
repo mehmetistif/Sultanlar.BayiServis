@@ -106,16 +106,50 @@ namespace Sultanlar.ClassLib
             return true;
         }
 
+        public bool KaanStokGonder()
+        {
+            Kaan.Service1 scl = new Kaan.Service1();
+            scl.Timeout = 1200000;
+            Kaan.Authentication auth = new Kaan.Authentication();
+            auth.username = "sultanlar";
+            auth.password = "Sn80C3REN";
+            Kaan.resultB2BDepoRapor stok = scl.SultanlarDepoDurum(auth);
+
+            Kaan.Urun[] depostok = new Kaan.Urun[stok.MerkezDepo.Length + stok.IadeDepo.Length];
+            for (int i = 0; i < stok.MerkezDepo.Length; i++)
+            {
+                depostok[i] = stok.MerkezDepo[i];
+            }
+            for (int i = 0; i < stok.IadeDepo.Length; i++)
+            {
+                depostok[stok.MerkezDepo.Length + i] = stok.IadeDepo[i];
+            }
+
+            DataTable dt = CopyGenericToDataTable(depostok, new ArrayList() { "ExtensionData" });
+            DataSet ds = new DataSet();
+            ds.Tables.Add(dt);
+
+            yilad = "YIL";
+            yil = DateTime.Now.Year;
+            ayad = "AY";
+            ay = DateTime.Now.Month;
+            string yazildi = Export(ds, false);
+
+            //ev.WriteEntry(DateTime.Now.ToString() + (yazildi != "" ? " Kaan Gıda stok verisi gönderildi." : " Kaan Gıda satış stok gönderilemedi."), EventLogEntryType.Information);
+
+            return true;
+        }
+
         public string Export(DataSet ds, bool satis)
         {
             try
             {
                 HttpWebRequest wr = (HttpWebRequest)WebRequest.Create("http://www.ittihadteknoloji.com.tr/wcf/bayiservis.svc/web/Post?bayikod=" + bayikod + 
                     "&satis=" + (satis ? "Satis" : "Stok") + 
-                    "&yilad=" + (satis ? yilad : "") + 
-                    "&yil=" + (satis ? yil.ToString() : "") + 
-                    "&ayad=" + (satis ? ayad : "") + 
-                    "&ay=" + (satis ? ay.ToString() : ""));
+                    "&yilad=" + (satis ? yilad : "") +
+                    "&yil=" + yil.ToString() +
+                    "&ayad=" + (satis ? ayad : "") +
+                    "&ay=" + ay.ToString());
                 wr.Method = "POST";
                 wr.ContentType = "text/xml; encoding='utf-8'";
                 byte[] bytes = Encoding.UTF8.GetBytes(ds.GetXml());

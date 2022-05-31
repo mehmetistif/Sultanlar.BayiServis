@@ -39,6 +39,7 @@ namespace Sultanlar.WinServis
             {
                 Class1 cls = new Class1(ev, "1071593");
                 cls.KaanGonder();
+                cls.KaanStokGonder();
             }
         }
 

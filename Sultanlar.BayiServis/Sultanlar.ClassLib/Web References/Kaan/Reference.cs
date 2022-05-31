@@ -32,6 +32,8 @@ namespace Sultanlar.ClassLib.Kaan {
         
         private System.Threading.SendOrPostCallback SultanlarRaporOperationCompleted;
         
+        private System.Threading.SendOrPostCallback SultanlarDepoDurumOperationCompleted;
+        
         private bool useDefaultCredentialsSetExplicitly;
         
         /// <remarks/>
@@ -74,6 +76,9 @@ namespace Sultanlar.ClassLib.Kaan {
         public event SultanlarRaporCompletedEventHandler SultanlarRaporCompleted;
         
         /// <remarks/>
+        public event SultanlarDepoDurumCompletedEventHandler SultanlarDepoDurumCompleted;
+        
+        /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/SultanlarRapor", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         public resultB2BSatisRapor SultanlarRapor(Authentication auth, System.DateTime ilktarih, System.DateTime sontarih) {
             object[] results = this.Invoke("SultanlarRapor", new object[] {
@@ -103,6 +108,35 @@ namespace Sultanlar.ClassLib.Kaan {
             if ((this.SultanlarRaporCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.SultanlarRaporCompleted(this, new SultanlarRaporCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/SultanlarDepoDurum", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public resultB2BDepoRapor SultanlarDepoDurum(Authentication auth) {
+            object[] results = this.Invoke("SultanlarDepoDurum", new object[] {
+                        auth});
+            return ((resultB2BDepoRapor)(results[0]));
+        }
+        
+        /// <remarks/>
+        public void SultanlarDepoDurumAsync(Authentication auth) {
+            this.SultanlarDepoDurumAsync(auth, null);
+        }
+        
+        /// <remarks/>
+        public void SultanlarDepoDurumAsync(Authentication auth, object userState) {
+            if ((this.SultanlarDepoDurumOperationCompleted == null)) {
+                this.SultanlarDepoDurumOperationCompleted = new System.Threading.SendOrPostCallback(this.OnSultanlarDepoDurumOperationCompleted);
+            }
+            this.InvokeAsync("SultanlarDepoDurum", new object[] {
+                        auth}, this.SultanlarDepoDurumOperationCompleted, userState);
+        }
+        
+        private void OnSultanlarDepoDurumOperationCompleted(object arg) {
+            if ((this.SultanlarDepoDurumCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.SultanlarDepoDurumCompleted(this, new SultanlarDepoDurumCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
         
@@ -166,6 +200,63 @@ namespace Sultanlar.ClassLib.Kaan {
             }
             set {
                 this.idField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.8.4084.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://tempuri.org/")]
+    public partial class Urun {
+        
+        private string sAPKODField;
+        
+        private string bARKODField;
+        
+        private string iSIMField;
+        
+        private long mIKTARField;
+        
+        /// <remarks/>
+        public string SAPKOD {
+            get {
+                return this.sAPKODField;
+            }
+            set {
+                this.sAPKODField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string BARKOD {
+            get {
+                return this.bARKODField;
+            }
+            set {
+                this.bARKODField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string ISIM {
+            get {
+                return this.iSIMField;
+            }
+            set {
+                this.iSIMField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public long MIKTAR {
+            get {
+                return this.mIKTARField;
+            }
+            set {
+                this.mIKTARField = value;
             }
         }
     }
@@ -312,6 +403,7 @@ namespace Sultanlar.ClassLib.Kaan {
     }
     
     /// <remarks/>
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(resultB2BDepoRapor))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(resultB2BSatisRapor))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.8.4084.0")]
     [System.SerializableAttribute()]
@@ -341,6 +433,39 @@ namespace Sultanlar.ClassLib.Kaan {
             }
             set {
                 this.hataMesajiField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.8.4084.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://tempuri.org/")]
+    public partial class resultB2BDepoRapor : classResult {
+        
+        private Urun[] merkezDepoField;
+        
+        private Urun[] iadeDepoField;
+        
+        /// <remarks/>
+        public Urun[] MerkezDepo {
+            get {
+                return this.merkezDepoField;
+            }
+            set {
+                this.merkezDepoField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public Urun[] IadeDepo {
+            get {
+                return this.iadeDepoField;
+            }
+            set {
+                this.iadeDepoField = value;
             }
         }
     }
@@ -388,6 +513,32 @@ namespace Sultanlar.ClassLib.Kaan {
             get {
                 this.RaiseExceptionIfNecessary();
                 return ((resultB2BSatisRapor)(this.results[0]));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
+    public delegate void SultanlarDepoDurumCompletedEventHandler(object sender, SultanlarDepoDurumCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.8.4084.0")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class SultanlarDepoDurumCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal SultanlarDepoDurumCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        /// <remarks/>
+        public resultB2BDepoRapor Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((resultB2BDepoRapor)(this.results[0]));
             }
         }
     }
