@@ -37,6 +37,13 @@ namespace Sultanlar.BayiWinApp
             prs.StartInfo = startInfo;
             prs.Start();*/
 
+            foreach (Control control in this.Controls)
+                if (control.Name != "panel1")
+                    control.Enabled = false;
+            panel1.Dock = DockStyle.Fill;
+            panel1.BringToFront();
+
+
             config = new XmlDocument();
             config.Load("config.xml");
             textBox1.Text = config.GetElementsByTagName("bayikod")[0].InnerText;
@@ -228,6 +235,19 @@ namespace Sultanlar.BayiWinApp
         {
             Class1 cls = new Class1(ev, "1071593");
             cls.KaanStokGonder();
+        }
+
+        private void textBox12_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                if (textBox12.Text == "sulbayi")
+                {
+                    panel1.Visible = false;
+                    foreach (Control control in this.Controls)
+                        control.Enabled = true;
+                }
+            }
         }
     }
 }

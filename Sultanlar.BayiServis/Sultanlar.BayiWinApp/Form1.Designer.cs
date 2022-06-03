@@ -56,6 +56,9 @@ namespace Sultanlar.BayiWinApp
             this.label8 = new System.Windows.Forms.Label();
             this.button7 = new System.Windows.Forms.Button();
             this.button8 = new System.Windows.Forms.Button();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.textBox12 = new System.Windows.Forms.TextBox();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // textBox1
@@ -126,6 +129,7 @@ namespace Sultanlar.BayiWinApp
             // 
             this.textBox5.Location = new System.Drawing.Point(108, 116);
             this.textBox5.Name = "textBox5";
+            this.textBox5.PasswordChar = '*';
             this.textBox5.Size = new System.Drawing.Size(319, 20);
             this.textBox5.TabIndex = 4;
             // 
@@ -293,11 +297,29 @@ namespace Sultanlar.BayiWinApp
             this.button8.Visible = false;
             this.button8.Click += new System.EventHandler(this.button8_Click);
             // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.textBox12);
+            this.panel1.Location = new System.Drawing.Point(3, 6);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(79, 10);
+            this.panel1.TabIndex = 17;
+            // 
+            // textBox12
+            // 
+            this.textBox12.Location = new System.Drawing.Point(172, 230);
+            this.textBox12.Name = "textBox12";
+            this.textBox12.PasswordChar = '*';
+            this.textBox12.Size = new System.Drawing.Size(100, 20);
+            this.textBox12.TabIndex = 0;
+            this.textBox12.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox12_KeyDown);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(441, 512);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.button8);
             this.Controls.Add(this.button7);
             this.Controls.Add(this.label8);
@@ -330,6 +352,8 @@ namespace Sultanlar.BayiWinApp
             this.Name = "Form1";
             this.Text = "Sultanlar Bayii App";
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -364,6 +388,8 @@ namespace Sultanlar.BayiWinApp
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Button button7;
         private System.Windows.Forms.Button button8;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.TextBox textBox12;
     }
 }
 
