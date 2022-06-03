@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Collections;
+using System.Security.Cryptography;
 
 namespace Sultanlar.ClassLib
 {
@@ -50,6 +51,27 @@ namespace Sultanlar.ClassLib
 
             querySatis = QuerySatis + " WHERE " + YilAd + " = " + Yil + " AND " + AyAd + " >= " + (Ay - 3).ToString();
         }
+
+        #region crypt
+        private byte[] key = new byte[8] { 8, 2, 3, 4, 9, 6, 5, 7 };
+        private byte[] iv = new byte[8] { 5, 9, 1, 7, 5, 6, 2, 8 };
+        public string Enrypt(string text)
+        {
+            SymmetricAlgorithm algorithm = DES.Create();
+            ICryptoTransform transform = algorithm.CreateEncryptor(key, iv);
+            byte[] inputbuffer = Encoding.Unicode.GetBytes(text);
+            byte[] outputBuffer = transform.TransformFinalBlock(inputbuffer, 0, inputbuffer.Length);
+            return Convert.ToBase64String(outputBuffer);
+        }
+        public string Decrypt(string text)
+        {
+            SymmetricAlgorithm algorithm = DES.Create();
+            ICryptoTransform transform = algorithm.CreateDecryptor(key, iv);
+            byte[] inputbuffer = Convert.FromBase64String(text);
+            byte[] outputBuffer = transform.TransformFinalBlock(inputbuffer, 0, inputbuffer.Length);
+            return Encoding.Unicode.GetString(outputBuffer);
+        }
+        #endregion
 
         public string GetData(bool satis)
         {

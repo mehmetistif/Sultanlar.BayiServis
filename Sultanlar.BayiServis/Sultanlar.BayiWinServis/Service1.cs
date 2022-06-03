@@ -49,7 +49,7 @@ namespace Sultanlar.BayiWinServis
             server = config.GetElementsByTagName("server")[0].InnerText;
             database = config.GetElementsByTagName("database")[0].InnerText;
             userid = config.GetElementsByTagName("userid")[0].InnerText;
-            password = config.GetElementsByTagName("password")[0].InnerText;
+            password = new Class1(ev, "").Decrypt(config.GetElementsByTagName("password")[0].InnerText);
             querySatis = config.GetElementsByTagName("querySatis")[0].InnerText;
             queryStok = config.GetElementsByTagName("queryStok")[0].InnerText;
             yilAd = config.GetElementsByTagName("yilad")[0].InnerText;

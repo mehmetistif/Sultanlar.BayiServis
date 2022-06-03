@@ -50,7 +50,7 @@ namespace Sultanlar.BayiWinApp
             textBox2.Text = config.GetElementsByTagName("server")[0].InnerText;
             textBox3.Text = config.GetElementsByTagName("database")[0].InnerText;
             textBox4.Text = config.GetElementsByTagName("userid")[0].InnerText;
-            textBox5.Text = config.GetElementsByTagName("password")[0].InnerText;
+            textBox5.Text = new Class1(ev, "").Decrypt(config.GetElementsByTagName("password")[0].InnerText);
             textBox6.Text = config.GetElementsByTagName("querySatis")[0].InnerText;
             textBox7.Text = config.GetElementsByTagName("queryStok")[0].InnerText;
             textBox10.Text = config.GetElementsByTagName("yilad")[0].InnerText;
@@ -66,7 +66,7 @@ namespace Sultanlar.BayiWinApp
             config.GetElementsByTagName("server")[0].InnerText = textBox2.Text.Trim();
             config.GetElementsByTagName("database")[0].InnerText = textBox3.Text.Trim();
             config.GetElementsByTagName("userid")[0].InnerText = textBox4.Text.Trim();
-            config.GetElementsByTagName("password")[0].InnerText = textBox5.Text.Trim();
+            config.GetElementsByTagName("password")[0].InnerText = new Class1(ev, "").Enrypt(textBox5.Text);
             config.GetElementsByTagName("querySatis")[0].InnerText = textBox6.Text.Trim();
             config.GetElementsByTagName("queryStok")[0].InnerText = textBox7.Text.Trim();
             config.GetElementsByTagName("yilad")[0].InnerText = textBox10.Text.Trim();
