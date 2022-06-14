@@ -4,7 +4,7 @@
   <server>10.10.41.2</server>
   <database>DisVeri</database>
   <userid>rapor</userid>
-  <password>rapor+-</password>
+  <password>3iYdhCIYfqYuoV/lEVu4sw==</password>
   <querySatis>SELECT [YIL],[AY],[FAT_NO],[FAT_TAR],[SAT_TEM],[CH_KOD],[IL],[ILCE][MAL_KOD],[URT_KOD],[MAL_ACIKLAMA],[ADET],[ANABIRIM],[NET_TOP],[KDV_TOP],[KDVDAHIL] FROM tbl_1001315_Satis</querySatis>
   <queryStok>SELECT * FROM tbl_1001315_Stok</queryStok>
   <yilad>YIL</yilad>
