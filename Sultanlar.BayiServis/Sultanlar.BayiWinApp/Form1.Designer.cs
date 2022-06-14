@@ -129,6 +129,7 @@ namespace Sultanlar.BayiWinApp
             // 
             this.textBox5.Location = new System.Drawing.Point(108, 116);
             this.textBox5.Name = "textBox5";
+            this.textBox5.PasswordChar = '*';
             this.textBox5.Size = new System.Drawing.Size(319, 20);
             this.textBox5.TabIndex = 4;
             // 
