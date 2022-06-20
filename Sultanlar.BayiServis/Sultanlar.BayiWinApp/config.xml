@@ -5,8 +5,8 @@
   <database>DisVeri</database>
   <userid>rapor</userid>
   <password>3iYdhCIYfqYuoV/lEVu4sw==</password>
-  <querySatis>SELECT [YIL],[AY],[FAT_NO],[FAT_TAR],[SAT_TEM],[CH_KOD],[IL],[ILCE][MAL_KOD],[URT_KOD],[MAL_ACIKLAMA],[ADET],[ANABIRIM],[NET_TOP],[KDV_TOP],[KDVDAHIL] FROM tbl_1001315_Satis</querySatis>
-  <queryStok>SELECT * FROM tbl_1001315_Stok</queryStok>
+  <querySatis>SELECT [YIL],[AY],[FAT_NO],[FAT_TAR],[SAT_TEM],[CH_KOD],[IL],[ILCE][MAL_KOD],[URT_KOD],[MAL_ACIKLAMA],[ADET],[ANABIRIM],[NET_TOP],[KDV_TOP],[KDVDAHIL] FROM tbl_1001327_Satis</querySatis>
+  <queryStok>SELECT * FROM tbl_1001327_Stok</queryStok>
   <yilad>YIL</yilad>
   <yil>2022</yil>
   <ayad>AY</ayad>

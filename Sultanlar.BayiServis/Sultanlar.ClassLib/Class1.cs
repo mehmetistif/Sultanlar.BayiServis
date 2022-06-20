@@ -174,6 +174,8 @@ namespace Sultanlar.ClassLib
                     "&ay=" + ay.ToString());
                 wr.Method = "POST";
                 wr.ContentType = "text/xml; encoding='utf-8'";
+                wr.Timeout = 600000;
+                wr.ReadWriteTimeout = 600000;
                 byte[] bytes = Encoding.UTF8.GetBytes(ds.GetXml());
 
                 Stream requestStream = wr.GetRequestStream();
