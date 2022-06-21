@@ -137,15 +137,15 @@ namespace Sultanlar.ClassLib
             auth.password = "Sn80C3REN";
             Kaan.resultB2BDepoRapor stok = scl.SultanlarDepoDurum(auth);
 
-            Kaan.Urun[] depostok = new Kaan.Urun[stok.MerkezDepo.Length + stok.IadeDepo.Length];
+            Kaan.Urun[] depostok = new Kaan.Urun[stok.MerkezDepo.Length/* + stok.IadeDepo.Length*/];
             for (int i = 0; i < stok.MerkezDepo.Length; i++)
             {
                 depostok[i] = stok.MerkezDepo[i];
             }
-            for (int i = 0; i < stok.IadeDepo.Length; i++)
+            /*for (int i = 0; i < stok.IadeDepo.Length; i++)
             {
                 depostok[stok.MerkezDepo.Length + i] = stok.IadeDepo[i];
-            }
+            }*/
 
             DataTable dt = CopyGenericToDataTable(depostok, new ArrayList() { "ExtensionData" });
             DataSet ds = new DataSet();
