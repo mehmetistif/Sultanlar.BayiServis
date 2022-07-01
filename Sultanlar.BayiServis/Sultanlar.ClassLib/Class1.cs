@@ -9,6 +9,7 @@ using System.IO;
 using System.Net;
 using System.Collections;
 using System.Security.Cryptography;
+using Newtonsoft.Json;
 
 namespace Sultanlar.ClassLib
 {
@@ -160,6 +161,167 @@ namespace Sultanlar.ClassLib
             //ev.WriteEntry(DateTime.Now.ToString() + (yazildi != "" ? " Kaan Gıda stok verisi gönderildi." : " Kaan Gıda satış stok gönderilemedi."), EventLogEntryType.Information);
 
             return true;
+        }
+
+        public bool PekerGonder()
+        {
+            int ikiayonce = DateTime.Now.AddMonths(-3).Month;
+            DateTime dtBas = Convert.ToDateTime(DateTime.Now.Year.ToString() + "." + (ikiayonce < 1 ? "1" : ikiayonce.ToString()) + ".1");
+            DateTime dtBit = DateTime.Now;
+
+            string AY = dtBas.Month.ToString().Length == 1 ? "0" + dtBas.Month.ToString() : dtBas.Month.ToString();
+
+            string sURL = "https://pekerticaret.ws.dia.com.tr/api/v3/scf/json";
+
+            var httpWebRequest = (HttpWebRequest)WebRequest.Create(sURL);
+            httpWebRequest.ContentType = "application/json";
+            httpWebRequest.Method = "POST";
+
+            using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
+            {
+                string jsonWS = @"
+                {""scf_fatura_listele_ayrintili"" :
+                    {""session_id"": """ + PekerSession() + @""",
+                     ""firma_kodu"": 1,
+                     ""donem_kodu"": 7,
+                     ""filters"":[{""field"": ""kartozelkodu2"", ""operator"": ""="", ""value"": ""SULTANLAR GRUP""},{ ""field"": ""tarih"", ""operator"": "">="", ""value"": """ + dtBas.Year.ToString() + @"-" + AY + @"-01 00:00:00.00""}],
+                     ""sorts"": """",
+                     ""params"": {
+                        ""selectedcolumns"": [""turu"", ""turuack"", ""kartozelkodu2"", ""satiselemani"", ""carikodu"", ""unvan"", ""sevkadresi"", ""tarih"", ""belgeno"", ""belgeno2"", ""kartkodu"", ""kartaciklama"", ""kdv"", ""fatanabirimi"", ""anamiktar"", ""birimfiyati"", ""indirimtoplam"", ""sonbirimfiyati"", ""kdvtutari"", ""toplamtutar"", ""kdvdurumu"", ""iptal""]
+	                 },
+                     ""limit"": 0,
+                     ""offset"": 0
+                    }
+                }
+                ";
+
+                streamWriter.Write(jsonWS);
+                streamWriter.Flush();
+                streamWriter.Close();
+            }
+
+            var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse(); 
+            DataTable dt;
+            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+            {
+                var result = streamReader.ReadToEnd().Replace("\"msg\": \"\",", "").Replace("\"code\": \"200\",", "").Replace("\"result\": ", "");
+                result = result.Substring(1, result.Length - 2);
+                dt = (DataTable)JsonConvert.DeserializeObject(result, (typeof(DataTable)));
+            }
+
+            DataSet ds = new DataSet();
+            ds.Tables.Add(dt);
+
+
+            yilad = "YIL";
+            yil = dtBas.Year;
+            ayad = "AY";
+            ay = dtBas.Month;
+            string yazildi = Export(ds, true);
+
+            ev.WriteEntry(dtBas.Year.ToString() + "-" + dtBas.Month.ToString() + (yazildi != "" ? " Peker Gıda satış verisi gönderildi." : " Peker Gıda satış verisi gönderilemedi."), EventLogEntryType.Information);
+
+            return true;
+        }
+
+        public bool PekerStokGonder()
+        {
+            int ikiayonce = DateTime.Now.AddMonths(-3).Month;
+            DateTime dtBas = Convert.ToDateTime(DateTime.Now.Year.ToString() + "." + (ikiayonce < 1 ? "1" : ikiayonce.ToString()) + ".1");
+            DateTime dtBit = DateTime.Now;
+
+            string sURL = "https://pekerticaret.ws.dia.com.tr/api/v3/scf/json";
+
+            var httpWebRequest = (HttpWebRequest)WebRequest.Create(sURL);
+            httpWebRequest.ContentType = "application/json";
+            httpWebRequest.Method = "POST";
+
+            using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
+            {
+                string jsonWS = @"
+                {""scf_stokkart_listele"" :
+                    {
+                         ""session_id"": """ + PekerSession() + @""",
+                         ""firma_kodu"": 1,
+                         ""donem_kodu"": 7,
+                         ""filters"":[{ ""field"": ""ozelkod2kodu"", ""operator"": ""="", ""value"": ""SULTANLAR GRUP""}],
+                         ""sorts"": [],
+                         ""params"": {
+                            ""_key"": 4597817,
+	                        ""_key_sis_depo_filtre"": 0,
+	                        ""tarih"": ""2099-12-31"",
+                            ""selectedcolumns"": [""aciklama"", ""stokkartkodu"", ""fiili_stok"", ""fiili_stok_irs"", ""gercek_stok"", ""gercek_stok_fat"", ""gercek_stok_irs"", ""b2c_depomiktari"", ""b2b_depomiktari""]
+	                     },
+                         ""limit"": 0,
+                         ""offset"": 0
+                    }
+                }
+                ";
+
+                streamWriter.Write(jsonWS);
+                streamWriter.Flush();
+                streamWriter.Close();
+            }
+
+            var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+            DataTable dt;
+            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+            {
+                var result = streamReader.ReadToEnd().Replace("\"msg\": \"\",", "").Replace("\"code\": \"200\",", "").Replace("\"result\": ", "");
+                result = result.Substring(1, result.Length - 2);
+                dt = (DataTable)JsonConvert.DeserializeObject(result, (typeof(DataTable)));
+            }
+
+            DataSet ds = new DataSet();
+            ds.Tables.Add(dt);
+
+
+            yilad = "YIL";
+            yil = dtBas.Year;
+            ayad = "AY";
+            ay = dtBas.Month;
+            string yazildi = Export(ds, true);
+
+            ev.WriteEntry(dtBas.Year.ToString() + "-" + dtBas.Month.ToString() + (yazildi != "" ? " Peker Gıda stok verisi gönderildi." : " Peker Gıda stok verisi gönderilemedi."), EventLogEntryType.Information);
+
+            return true;
+        }
+
+        public string PekerSession()
+        {
+            string sURL = "https://pekerticaret.ws.dia.com.tr/api/v3/sis/json";
+
+            var httpWebRequest = (HttpWebRequest)WebRequest.Create(sURL);
+            httpWebRequest.ContentType = "application/json";
+            httpWebRequest.Method = "POST";
+
+            using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
+            {
+
+                // SESSION ID MANUEL YAZILMALI
+                string jsonWS = @"
+                {""login"" :
+                    {
+                       ""username"": ""ws2"",
+                       ""password"": ""111222"",
+                       ""disconnect_same_user"": true,
+                       ""params"": { ""apikey"": ""72862570-46db-450e-870b-4563605a984d""}
+                    }
+                }";
+
+                streamWriter.Write(jsonWS);
+                streamWriter.Flush();
+                streamWriter.Close();
+            }
+
+            var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+            var result = string.Empty;
+            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+            {
+                result = streamReader.ReadToEnd().Replace("{", "").Replace("}", "").Replace("\"msg\": \"", "").Replace("\",", "").Replace("\"code\": \"200", "").Replace("\"warnings\": []", "").Trim();
+            }
+
+            return result;
         }
 
         public string Export(DataSet ds, bool satis)

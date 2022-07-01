@@ -58,6 +58,7 @@ namespace Sultanlar.BayiWinApp
             this.button8 = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.textBox12 = new System.Windows.Forms.TextBox();
+            this.button9 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -314,6 +315,16 @@ namespace Sultanlar.BayiWinApp
             this.textBox12.TabIndex = 0;
             this.textBox12.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox12_KeyDown);
             // 
+            // button9
+            // 
+            this.button9.Location = new System.Drawing.Point(108, 489);
+            this.button9.Name = "button9";
+            this.button9.Size = new System.Drawing.Size(75, 23);
+            this.button9.TabIndex = 16;
+            this.button9.Text = "button9";
+            this.button9.UseVisualStyleBackColor = true;
+            this.button9.Click += new System.EventHandler(this.button9_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -321,6 +332,7 @@ namespace Sultanlar.BayiWinApp
             this.ClientSize = new System.Drawing.Size(441, 512);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.button8);
+            this.Controls.Add(this.button9);
             this.Controls.Add(this.button7);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.button3);
@@ -390,6 +402,7 @@ namespace Sultanlar.BayiWinApp
         private System.Windows.Forms.Button button8;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.TextBox textBox12;
+        private System.Windows.Forms.Button button9;
     }
 }
 

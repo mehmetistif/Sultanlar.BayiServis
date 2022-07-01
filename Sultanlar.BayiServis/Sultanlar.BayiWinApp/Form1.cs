@@ -249,5 +249,11 @@ namespace Sultanlar.BayiWinApp
                 }
             }
         }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            Class1 cls = new Class1(ev, "1052689");
+            cls.PekerStokGonder();
+        }
     }
 }
