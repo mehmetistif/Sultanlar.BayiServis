@@ -280,7 +280,7 @@ namespace Sultanlar.ClassLib
             yil = dtBas.Year;
             ayad = "AY";
             ay = dtBas.Month;
-            string yazildi = Export(ds, true);
+            string yazildi = Export(ds, false);
 
             ev.WriteEntry(dtBas.Year.ToString() + "-" + dtBas.Month.ToString() + (yazildi != "" ? " Peker Gıda stok verisi gönderildi." : " Peker Gıda stok verisi gönderilemedi."), EventLogEntryType.Information);
 
