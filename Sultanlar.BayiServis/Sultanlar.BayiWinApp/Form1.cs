@@ -57,6 +57,7 @@ namespace Sultanlar.BayiWinApp
             textBox8.Text = config.GetElementsByTagName("yil")[0].InnerText;
             textBox11.Text = config.GetElementsByTagName("ayad")[0].InnerText;
             textBox9.Text = config.GetElementsByTagName("ay")[0].InnerText;
+            checkBox1.Checked = Convert.ToBoolean(config.GetElementsByTagName("https")[0].InnerText);
             label8.Text = "Son gönderim: " + config.GetElementsByTagName("lastSent")[0].InnerText;
         }
 
@@ -73,6 +74,7 @@ namespace Sultanlar.BayiWinApp
             config.GetElementsByTagName("yil")[0].InnerText = textBox8.Text.Trim();
             config.GetElementsByTagName("ayad")[0].InnerText = textBox11.Text.Trim();
             config.GetElementsByTagName("ay")[0].InnerText = textBox9.Text.Trim();
+            config.GetElementsByTagName("https")[0].InnerText = checkBox1.Checked ? "true" : "false";
             config.Save("config.xml");
             MessageBox.Show("Kaydedildi");
         }
@@ -157,7 +159,7 @@ namespace Sultanlar.BayiWinApp
         {
             string query = textBox6.Text.Trim();
             Class1 cls = new Class1(ev, textBox1.Text.Trim(), textBox2.Text.Trim(), textBox3.Text.Trim(), textBox4.Text.Trim(), textBox5.Text.Trim(), query, textBox7.Text.Trim(),
-                textBox10.Text.Trim(), Convert.ToInt32(textBox8.Text.Trim()), textBox11.Text.Trim(), Convert.ToInt32(textBox9.Text.Trim()));
+                textBox10.Text.Trim(), Convert.ToInt32(textBox8.Text.Trim()), textBox11.Text.Trim(), Convert.ToInt32(textBox9.Text.Trim()), checkBox1.Checked);
             MessageBox.Show(cls.GetData(true));
         }
 
@@ -165,7 +167,7 @@ namespace Sultanlar.BayiWinApp
         {
             string query = textBox7.Text.Trim();
             Class1 cls = new Class1(ev, textBox1.Text.Trim(), textBox2.Text.Trim(), textBox3.Text.Trim(), textBox4.Text.Trim(), textBox5.Text.Trim(), textBox6.Text.Trim(), query,
-                textBox10.Text.Trim(), Convert.ToInt32(textBox8.Text.Trim()), textBox11.Text.Trim(), Convert.ToInt32(textBox9.Text.Trim()));
+                textBox10.Text.Trim(), Convert.ToInt32(textBox8.Text.Trim()), textBox11.Text.Trim(), Convert.ToInt32(textBox9.Text.Trim()), checkBox1.Checked);
             MessageBox.Show(cls.GetData(false));
         }
 

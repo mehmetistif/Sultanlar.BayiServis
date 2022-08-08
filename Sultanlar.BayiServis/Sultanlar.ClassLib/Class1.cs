@@ -27,6 +27,7 @@ namespace Sultanlar.ClassLib
         private int yil;
         private string ayad;
         private int ay;
+        private bool https;
 
         public Class1(EventLog Ev, string Bayikod)
         {
@@ -34,7 +35,7 @@ namespace Sultanlar.ClassLib
             bayikod = Bayikod;
         }
 
-        public Class1(EventLog Ev, string Bayikod, string Server, string Database, string Userid, string Password, string QuerySatis, string QueryStok, string YilAd, int Yil, string AyAd, int Ay)
+        public Class1(EventLog Ev, string Bayikod, string Server, string Database, string Userid, string Password, string QuerySatis, string QueryStok, string YilAd, int Yil, string AyAd, int Ay, bool Https)
         {
             ev = Ev;
 
@@ -49,6 +50,7 @@ namespace Sultanlar.ClassLib
             yil = Yil;
             ayad = AyAd;
             ay = Ay;
+            https = Https;
 
             querySatis = QuerySatis + " WHERE " + YilAd + " = " + Yil + " AND " + AyAd + " >= " + (Ay - 3).ToString();
         }
@@ -328,12 +330,27 @@ namespace Sultanlar.ClassLib
         {
             try
             {
-                HttpWebRequest wr = (HttpWebRequest)WebRequest.Create("http://www.ittihadteknoloji.com.tr/wcf/bayiservis.svc/web/Post?bayikod=" + bayikod + 
-                    "&satis=" + (satis ? "Satis" : "Stok") + 
+                HttpWebRequest wr; //(HttpWebRequest)WebRequest.CreateDefault(new Uri(""))
+
+                if (https)
+                {
+                    wr = (HttpWebRequest)WebRequest.Create("https://www.ittihadteknoloji.com.tr/dis/bayiservis/SatisStok/" + bayikod +
+                    "/" + (satis ? "Satis" : "Stok") +
+                    "/" + (satis ? yilad : "") +
+                    "/" + yil.ToString() +
+                    "/" + (satis ? ayad : "") +
+                    "/" + ay.ToString());
+                }
+                else
+                {
+                    wr = (HttpWebRequest)WebRequest.Create("http://www.ittihadteknoloji.com.tr/wcf/bayiservis.svc/web/Post?bayikod=" + bayikod +
+                    "&satis=" + (satis ? "Satis" : "Stok") +
                     "&yilad=" + (satis ? yilad : "") +
                     "&yil=" + yil.ToString() +
                     "&ayad=" + (satis ? ayad : "") +
                     "&ay=" + ay.ToString());
+                }
+
                 wr.Method = "POST";
                 wr.ContentType = "text/xml; encoding='utf-8'";
                 wr.Timeout = 600000;

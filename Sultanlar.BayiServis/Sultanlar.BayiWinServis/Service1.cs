@@ -38,6 +38,7 @@ namespace Sultanlar.BayiWinServis
         //string yil;
         string ayAd;
         //string ay;
+        bool https;
 
         protected override void OnStart(string[] args)
         {
@@ -56,10 +57,11 @@ namespace Sultanlar.BayiWinServis
             //yil = config.GetElementsByTagName("yil")[0].InnerText;
             ayAd = config.GetElementsByTagName("ayad")[0].InnerText;
             //ay = config.GetElementsByTagName("ay")[0].InnerText;
+            https = Convert.ToBoolean(config.GetElementsByTagName("https")[0].InnerText);
 
             ev = new EventLog();
             ev.Source = "Sultanlar Bayii Servis";
-            cls = new Class1(ev, bayikod, server, database, userid, password, querySatis, queryStok, yilAd, DateTime.Now.Year, ayAd, DateTime.Now.Month);
+            cls = new Class1(ev, bayikod, server, database, userid, password, querySatis, queryStok, yilAd, DateTime.Now.Year, ayAd, DateTime.Now.Month, https);
 
             tmr = new Timer(300000);
             tmr.Elapsed += Tmr_Elapsed;
