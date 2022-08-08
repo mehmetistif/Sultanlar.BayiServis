@@ -37,9 +37,9 @@ namespace Sultanlar.WinServis
         {
             if (DateTime.Now.Hour == 10 || DateTime.Now.Hour == 12 || DateTime.Now.Hour == 14 || DateTime.Now.Hour == 16 || DateTime.Now.Hour == 18 || DateTime.Now.Hour == 20)
             {
-                Class1 cls = new Class1(ev, "1071593");
+                /*Class1 cls = new Class1(ev, "1071593");
                 cls.KaanGonder();
-                cls.KaanStokGonder();
+                cls.KaanStokGonder();*/
 
 
                 Class1 cls1 = new Class1(ev, "1052689");
