@@ -336,9 +336,9 @@ namespace Sultanlar.ClassLib
                 {
                     wr = (HttpWebRequest)WebRequest.Create("https://www.ittihadteknoloji.com.tr/dis/bayiservis/SatisStok/" + bayikod +
                     "/" + (satis ? "Satis" : "Stok") +
-                    "/" + (satis ? yilad : "") +
+                    "/" + (satis ? yilad : "-") +
                     "/" + yil.ToString() +
-                    "/" + (satis ? ayad : "") +
+                    "/" + (satis ? ayad : "-") +
                     "/" + ay.ToString());
                 }
                 else
