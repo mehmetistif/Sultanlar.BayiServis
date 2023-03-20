@@ -10,6 +10,7 @@ using System.Net;
 using System.Collections;
 using System.Security.Cryptography;
 using Newtonsoft.Json;
+using FirebirdSql.Data.FirebirdClient;
 
 namespace Sultanlar.ClassLib
 {
@@ -21,29 +22,42 @@ namespace Sultanlar.ClassLib
         private string database;
         private string userid;
         private string password;
+        private string server1;
+        private string database1;
+        private string userid1;
+        private string password1;
         private string querySatis;
         private string queryStok;
         private string yilad;
-        private int yil;
+        private int basyil;
+        private int bityil;
         private string ayad;
-        private int ay;
+        private int basay;
+        private int bitay;
         private bool https;
+        private string db;
 
         public Class1(EventLog Ev, string Bayikod)
         {
+            ServicePointManager.SecurityProtocol = (SecurityProtocolType)3072;
+            ServicePointManager.Expect100Continue = true;
             ev = Ev;
             bayikod = Bayikod;
         }
 
-        public Class1(EventLog Ev, string Bayikod, string Server, string Database, string Userid, string Password, string QuerySatis, string QueryStok, string YilAd, int Yil, string AyAd, int Ay, bool Https)
+        /*public Class1(EventLog Ev, string Bayikod, string Server, string Database, string Userid, string Password, string Server1, string Database1, string Userid1, string Password1, string QuerySatis, string QueryStok, string YilAd, int Yil, string AyAd, int Ay, bool Https, string Db)
         {
             ev = Ev;
 
-            server = Server;
             bayikod = Bayikod;
+            server = Server;
             database = Database;
             userid = Userid;
             password = Password;
+            server1 = Server1;
+            database1 = Database1;
+            userid1 = Userid1;
+            password1 = Password1;
 
             queryStok = QueryStok;
             yilad = YilAd;
@@ -51,8 +65,63 @@ namespace Sultanlar.ClassLib
             ayad = AyAd;
             ay = Ay;
             https = Https;
+            db = Db;
 
-            querySatis = QuerySatis + " WHERE " + YilAd + " = " + Yil + " AND " + AyAd + " >= " + (Ay - 3).ToString();
+            DateTime baslangic = Convert.ToDateTime("01." + Ay + "." + Yil).AddMonths(-3);
+            querySatis = db == "sql" ? 
+                QuerySatis + " WHERE CONVERT(datetime,CONVERT(nvarchar(50)," + AyAd + ") + '.01.' + CONVERT(nvarchar(50)," + YilAd + ")) >= '" + baslangic.Month + ".01." + baslangic.Year + "'"
+            :
+                QuerySatis + " WHERE CAST(CAST(" + AyAd + " AS VARCHAR(100)) || '.01.' || CAST(" + YilAd + " AS VARCHAR(100)) AS DATE) >= '" + baslangic.Month + ".01." + baslangic.Year + "'";
+        }*/
+
+        public Class1(EventLog Ev, string Bayikod, string Server, string Database, string Userid, string Password, string Server1, string Database1, string Userid1, string Password1, string QuerySatis, string QueryStok, string YilAd, int BasYil, int BitYil, string AyAd, int BasAy, int BitAy, bool Https, string Db)
+        {
+            ev = Ev;
+
+            bayikod = Bayikod;
+            server = Server;
+            database = Database;
+            userid = Userid;
+            password = Password;
+            server1 = Server1;
+            database1 = Database1;
+            userid1 = Userid1;
+            password1 = Password1;
+
+            queryStok = QueryStok;
+            yilad = YilAd;
+            basyil = BasYil;
+            bityil = BitYil;
+            ayad = AyAd;
+            basay = BasAy;
+            bitay = BitAy;
+            https = Https;
+            db = Db;
+
+            DateTime baslangic = Convert.ToDateTime("01." + BasAy + "." + BasYil);
+            DateTime bitis = Convert.ToDateTime("01." + BitAy + "." + BitYil).AddMonths(1);
+
+            try
+            {
+                baslangic = DateTime.ParseExact(BasYil + "-" + (BasAy > 9 ? BasAy.ToString() : "0" + BasAy.ToString()) + "-01", "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture); //Convert.ToDateTime("01." + BasAy + "." + BasYil);
+                bitis = DateTime.ParseExact(BitYil + "-" + (BitAy > 9 ? BasAy.ToString() : "0" + BitAy.ToString()) + "-01", "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture).AddMonths(1); ; //Convert.ToDateTime("01." + BitAy + "." + BitYil).AddMonths(1);
+            }
+            catch (Exception ex)
+            {
+                ev.WriteEntry("[Hata] " + BasYil + "-" + (BasAy > 9 ? BasAy.ToString() : "0" + BasAy.ToString()) + "-01 - " + BitYil + "-" + (BitAy > 9 ? BasAy.ToString() : "0" + BitAy.ToString()) + "-01 : " + ex.Message, EventLogEntryType.Information);
+            }
+            
+
+            ev.WriteEntry("[Bilgi] Gönderilecek verinin aralık tarihi = yıl:" + baslangic.Year + " ay:" + baslangic.Month + " gün:" + baslangic.Day + 
+                " <= veri < " +
+                "yıl:" +  bitis.Year + " ay:" + bitis.Month + " gün:" + bitis.Day, EventLogEntryType.Information);
+
+            querySatis = db == "sql" ?
+                QuerySatis + " WHERE CONVERT(datetime,CONVERT(nvarchar(50)," + AyAd + ") + '.01.' + CONVERT(nvarchar(50)," + YilAd + ")) >= '" + baslangic.Month + ".01." + baslangic.Year +
+                "' AND CONVERT(datetime,CONVERT(nvarchar(50)," + AyAd + ") + '.01.' + CONVERT(nvarchar(50)," + YilAd + ")) < '" + bitis.Month + ".01." + bitis.Year + "'"
+            :
+                QuerySatis + " WHERE CAST(CAST(" + AyAd + " AS VARCHAR(100)) || '.01.' || CAST(" + YilAd + " AS VARCHAR(100)) AS DATE) >= '" + baslangic.Month + ".01." + baslangic.Year +
+                "' AND CAST(CAST(" + AyAd + " AS VARCHAR(100)) || '.01.' || CAST(" + YilAd + " AS VARCHAR(100)) AS DATE) < '" + bitis.Month + ".01." + bitis.Year + "'";
         }
 
         #region crypt
@@ -78,10 +147,11 @@ namespace Sultanlar.ClassLib
 
         public string GetData(bool satis)
         {
-            SqlConnection conn = new SqlConnection("Server=" + server + "; Database=" + database + "; User Id=" + userid + "; Password=" + password + "; Trusted_Connection=False;");
-            SqlDataAdapter da = new SqlDataAdapter(satis ? querySatis : queryStok, conn);
             DataSet ds = new DataSet();
-            da.Fill(ds);
+            string sonuc = GetDataFromSource(ds, satis);
+            if (sonuc != "")
+                return sonuc;
+
             string donendeger = Export(ds, satis);
 
             string sat = satis ? "Satış" : "Stok";
@@ -90,6 +160,40 @@ namespace Sultanlar.ClassLib
             return donendeger;
         }
 
+        public string GetDataFromSource(DataSet ds, bool satis)
+        {
+            string Server = satis ? server : server1;
+            string Database = satis ? database : database1;
+            string Userid = satis ? userid : userid1;
+            string Password = satis ? password : password1;
+
+            try
+            {
+                if (db == "sql")
+                {
+                    SqlConnection conn = new SqlConnection("Server=" + Server + "; Database=" + Database + "; User Id=" + Userid + "; Password=" + Password + "; Trusted_Connection=False;");
+                    SqlDataAdapter da = new SqlDataAdapter(satis ? querySatis : queryStok, conn);
+                    da.SelectCommand.CommandTimeout = 600;
+                    da.Fill(ds);
+                }
+                else
+                {
+                    FbConnection conn = new FbConnection("User=" + Userid + ";Password=" + Password + ";Database=" + Database + ";DataSource=" + Server + ";Port=3050;Dialect=3;Charset=WIN1254;Role=;Connection lifetime=15;Pooling=true;MinPoolSize=0;MaxPoolSize=50;Packet Size=8192;ServerType = 0;");
+                    FbDataAdapter da = new FbDataAdapter(satis ? querySatis : queryStok, conn);
+                    da.SelectCommand.CommandTimeout = 600;
+                    da.Fill(ds);
+                }
+            }
+            catch (Exception ex)
+            {
+                ev.WriteEntry((satis ? "Satış" : "Stok") + ": " + ex.Message, EventLogEntryType.Information);
+                return ex.Message;
+            }
+
+            return "";
+        }
+
+        #region Kaan
         public bool KaanGonder()
         {
             int ikiayonce = DateTime.Now.AddMonths(-2).Month;
@@ -109,9 +213,9 @@ namespace Sultanlar.ClassLib
 
 
             yilad = "YIL";
-            yil = dtBas.Year;
+            bityil = dtBas.Year;
             ayad = "AY";
-            ay = dtBas.Month;
+            bitay = dtBas.Month;
             string yazildi = Export(ds, true);
 
             ev.WriteEntry(dtBas.Year.ToString() + "-" + dtBas.Month.ToString() + (yazildi != "" ? " Kaan Gıda satış verisi gönderildi." : " Kaan Gıda satış verisi gönderilemedi."), EventLogEntryType.Information);
@@ -130,7 +234,6 @@ namespace Sultanlar.ClassLib
 
             return true;
         }
-
         public bool KaanStokGonder()
         {
             Kaan.Service1 scl = new Kaan.Service1();
@@ -155,23 +258,25 @@ namespace Sultanlar.ClassLib
             ds.Tables.Add(dt);
 
             yilad = "YIL";
-            yil = DateTime.Now.Year;
+            bityil = DateTime.Now.Year;
             ayad = "AY";
-            ay = DateTime.Now.Month;
+            bitay = DateTime.Now.Month;
             string yazildi = Export(ds, false);
 
             //ev.WriteEntry(DateTime.Now.ToString() + (yazildi != "" ? " Kaan Gıda stok verisi gönderildi." : " Kaan Gıda satış stok gönderilemedi."), EventLogEntryType.Information);
 
             return true;
         }
+        #endregion
 
+        #region Peker
         public bool PekerGonder()
         {
-            int ikiayonce = DateTime.Now.AddMonths(-3).Month;
-            DateTime dtBas = Convert.ToDateTime(DateTime.Now.Year.ToString() + "." + (ikiayonce < 1 ? "1" : ikiayonce.ToString()) + ".1");
+            //int ikiayonce = DateTime.Now.AddMonths(-3).Month;
+            DateTime dtBas = DateTime.Now.AddMonths(-3); //Convert.ToDateTime(DateTime.Now.Year.ToString() + "." + (ikiayonce < 1 ? "1" : ikiayonce.ToString()) + ".1");
             DateTime dtBit = DateTime.Now;
 
-            string AY = dtBas.Month.ToString().Length == 1 ? "0" + dtBas.Month.ToString() : dtBas.Month.ToString();
+            //string AY = dtBas.Month.ToString().Length == 1 ? "0" + dtBas.Month.ToString() : dtBas.Month.ToString();
 
             string sURL = "https://pekerticaret.ws.dia.com.tr/api/v3/scf/json";
 
@@ -185,8 +290,8 @@ namespace Sultanlar.ClassLib
                 {""scf_fatura_listele_ayrintili"" :
                     {""session_id"": """ + PekerSession() + @""",
                      ""firma_kodu"": 1,
-                     ""donem_kodu"": 7,
-                     ""filters"":[{""field"": ""kartozelkodu2"", ""operator"": ""="", ""value"": ""SULTANLAR GRUP""},{ ""field"": ""tarih"", ""operator"": "">="", ""value"": """ + dtBas.Year.ToString() + @"-" + AY + @"-01 00:00:00.00""}],
+                     ""donem_kodu"": 8,
+                     ""filters"":[{""field"": ""kartozelkodu2"", ""operator"": ""IN"", ""value"": ""SULTANLAR GRUP,BANDUFF""},{ ""field"": ""tarih"", ""operator"": "">="", ""value"": """ + dtBas.Year.ToString() + @"-" + (dtBas.Month.ToString().Length == 1 ? "0" : "") + dtBas.Month.ToString() + @"-01 00:00:00.00""}],
                      ""sorts"": """",
                      ""params"": {
                         ""selectedcolumns"": [""turu"", ""turuack"", ""kartozelkodu2"", ""satiselemani"", ""carikodu"", ""unvan"", ""sevkadresi"", ""tarih"", ""belgeno"", ""belgeno2"", ""kartkodu"", ""kartaciklama"", ""kdv"", ""fatanabirimi"", ""anamiktar"", ""birimfiyati"", ""indirimtoplam"", ""sonbirimfiyati"", ""kdvtutari"", ""toplamtutar"", ""kdvdurumu"", ""iptal""]
@@ -216,21 +321,24 @@ namespace Sultanlar.ClassLib
 
 
             yilad = "YIL";
-            yil = dtBas.Year;
+            basyil = dtBas.Year;
+            bityil = dtBit.Year;
             ayad = "AY";
-            ay = dtBas.Month;
+            basay = dtBas.Month;
+            bitay = dtBit.Month;
             string yazildi = Export(ds, true);
 
             ev.WriteEntry(dtBas.Year.ToString() + "-" + dtBas.Month.ToString() + (yazildi != "" ? " Peker Gıda satış verisi gönderildi." : " Peker Gıda satış verisi gönderilemedi."), EventLogEntryType.Information);
 
             return true;
         }
-
         public bool PekerStokGonder()
         {
-            int ikiayonce = DateTime.Now.AddMonths(-3).Month;
-            DateTime dtBas = Convert.ToDateTime(DateTime.Now.Year.ToString() + "." + (ikiayonce < 1 ? "1" : ikiayonce.ToString()) + ".1");
+            //int ikiayonce = DateTime.Now.AddMonths(-3).Month;
+            DateTime dtBas = DateTime.Now.AddMonths(-3); //Convert.ToDateTime(DateTime.Now.Year.ToString() + "." + (ikiayonce < 1 ? "1" : ikiayonce.ToString()) + ".1");
             DateTime dtBit = DateTime.Now;
+
+            //string AY = dtBas.Month.ToString().Length == 1 ? "0" + dtBas.Month.ToString() : dtBas.Month.ToString();
 
             string sURL = "https://pekerticaret.ws.dia.com.tr/api/v3/scf/json";
 
@@ -246,7 +354,7 @@ namespace Sultanlar.ClassLib
                          ""session_id"": """ + PekerSession() + @""",
                          ""firma_kodu"": 1,
                          ""donem_kodu"": 7,
-                         ""filters"":[{ ""field"": ""ozelkod2kodu"", ""operator"": ""="", ""value"": ""SULTANLAR GRUP""}],
+                         ""filters"":[{ ""field"": ""ozelkod2kodu"", ""operator"": ""IN"", ""value"": ""SULTANLAR GRUP,BANDUFF""}],
                          ""sorts"": [],
                          ""params"": {
                             ""_key"": 4597817,
@@ -271,7 +379,15 @@ namespace Sultanlar.ClassLib
             {
                 var result = streamReader.ReadToEnd().Replace("\"msg\": \"\",", "").Replace("\"code\": \"200\",", "").Replace("\"result\": ", "");
                 result = result.Substring(1, result.Length - 2);
-                dt = (DataTable)JsonConvert.DeserializeObject(result, (typeof(DataTable)));
+
+                var o = JsonConvert.DeserializeObject<List<DiaStok>>(result);
+
+                var jsonSerializerSettings = new JsonSerializerSettings();
+                jsonSerializerSettings.MissingMemberHandling = MissingMemberHandling.Ignore;
+
+                //dt = (DataTable)JsonConvert.DeserializeObject(o.ToString(), (typeof(DataTable)));
+
+                dt = CopyGenericToDataTable(o.ToArray(), new ArrayList() { "ExtensionData" });
             }
 
             DataSet ds = new DataSet();
@@ -279,16 +395,17 @@ namespace Sultanlar.ClassLib
 
 
             yilad = "YIL";
-            yil = dtBas.Year;
+            basyil = dtBas.Year;
+            bityil = dtBit.Year;
             ayad = "AY";
-            ay = dtBas.Month;
+            basay = dtBas.Month;
+            bitay = dtBit.Month;
             string yazildi = Export(ds, false);
 
             ev.WriteEntry(dtBas.Year.ToString() + "-" + dtBas.Month.ToString() + (yazildi != "" ? " Peker Gıda stok verisi gönderildi." : " Peker Gıda stok verisi gönderilemedi."), EventLogEntryType.Information);
 
             return true;
         }
-
         public string PekerSession()
         {
             string sURL = "https://pekerticaret.ws.dia.com.tr/api/v3/sis/json";
@@ -325,6 +442,182 @@ namespace Sultanlar.ClassLib
 
             return result;
         }
+        #endregion
+
+        #region Yilmaz
+        public bool YilmazGonder()
+        {
+            //int ikiayonce = DateTime.Now.AddMonths(-3).Month;
+            DateTime dtBas = DateTime.Now.AddMonths(-3); //Convert.ToDateTime(DateTime.Now.Year.ToString() + "." + (ikiayonce < 1 ? "1" : ikiayonce.ToString()) + ".1");
+            DateTime dtBit = DateTime.Now;
+
+            //string AY = dtBas.Month.ToString().Length == 1 ? "0" + dtBas.Month.ToString() : dtBas.Month.ToString();
+
+            string sURL = "https://yilmazmesrubat.ws.dia.com.tr/api/v3/scf/json";
+
+            var httpWebRequest = (HttpWebRequest)WebRequest.Create(sURL);
+            httpWebRequest.ContentType = "application/json";
+            httpWebRequest.Method = "POST";
+
+            using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
+            {
+                string jsonWS = @"
+                {""scf_fatura_listele_ayrintili"" :
+                    {""session_id"": """ + YilmazSession() + @""",
+                     ""firma_kodu"": 1,
+                     ""donem_kodu"": 3,
+                     ""filters"":[{""field"": ""stokkartmarka"", ""operator"": ""="", ""value"": ""SULTANLAR""},{ ""field"": ""tarih"", ""operator"": "">="", ""value"": """ + dtBas.Year.ToString() + @"-" + (dtBas.Month.ToString().Length == 1 ? "0" : "") + dtBas.Month.ToString() + @"-01 00:00:00.00""}],
+                     ""sorts"": """",
+                     ""params"": {
+                        ""selectedcolumns"": [""turu"", ""turuack"", ""kartozelkodu2"", ""satiselemani"", ""carikodu"", ""unvan"", ""sevkadresi"", ""tarih"", ""belgeno"", ""belgeno2"", ""kartkodu"", ""kartaciklama"", ""kdv"", ""fatanabirimi"", ""anamiktar"", ""birimfiyati"", ""indirimtoplam"", ""sonbirimfiyati"", ""kdvtutari"", ""toplamtutar"", ""kdvdurumu"", ""iptal""]
+	                 },
+                     ""limit"": 0,
+                     ""offset"": 0
+                    }
+                }
+                ";
+
+                streamWriter.Write(jsonWS);
+                streamWriter.Flush();
+                streamWriter.Close();
+            }
+
+            var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+            DataTable dt;
+            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+            {
+                var result = streamReader.ReadToEnd().Replace("\"msg\": \"\",", "").Replace("\"code\": \"200\",", "").Replace("\"result\": ", "");
+                result = result.Substring(1, result.Length - 2);
+                dt = (DataTable)JsonConvert.DeserializeObject(result, (typeof(DataTable)));
+            }
+
+            DataSet ds = new DataSet();
+            ds.Tables.Add(dt);
+
+
+            yilad = "YIL";
+            basyil = dtBas.Year;
+            bityil = dtBit.Year;
+            ayad = "AY";
+            basay = dtBas.Month;
+            bitay = dtBit.Month;
+            string yazildi = Export(ds, true);
+
+            ev.WriteEntry(dtBas.Year.ToString() + "-" + dtBas.Month.ToString() + (yazildi != "" ? " Yılmaz meşrubat satış verisi gönderildi." : " Yılmaz meşrubat satış verisi gönderilemedi."), EventLogEntryType.Information);
+
+            return true;
+        }
+        public bool YilmazStokGonder()
+        {
+            //int ikiayonce = DateTime.Now.AddMonths(-3).Month;
+            DateTime dtBas = DateTime.Now.AddMonths(-3); //Convert.ToDateTime(DateTime.Now.Year.ToString() + "." + (ikiayonce < 1 ? "1" : ikiayonce.ToString()) + ".1");
+            DateTime dtBit = DateTime.Now;
+
+            //string AY = dtBas.Month.ToString().Length == 1 ? "0" + dtBas.Month.ToString() : dtBas.Month.ToString();
+
+            string sURL = "https://yilmazmesrubat.ws.dia.com.tr/api/v3/scf/json";
+
+            var httpWebRequest = (HttpWebRequest)WebRequest.Create(sURL);
+            httpWebRequest.ContentType = "application/json";
+            httpWebRequest.Method = "POST";
+
+            using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
+            {
+                string jsonWS = @"
+                {""scf_stokkart_listele"" :
+                    {
+                         ""session_id"": """ + YilmazSession() + @""",
+                         ""firma_kodu"": 1,
+                         ""donem_kodu"": 3,
+                         ""filters"":[{ ""field"": ""marka"", ""operator"": ""="", ""value"": ""SULTANLAR""}],
+                         ""sorts"": [],
+                         ""params"": {
+                            ""_key"": 4597817,
+	                        ""_key_sis_depo_filtre"": 0,
+	                        ""tarih"": ""2099-12-31"",
+                            ""selectedcolumns"": [""aciklama"", ""stokkartkodu"", ""fiili_stok"", ""fiili_stok_irs"", ""gercek_stok"", ""gercek_stok_fat"", ""gercek_stok_irs"", ""b2c_depomiktari"", ""b2b_depomiktari""]
+	                     },
+                         ""limit"": 0,
+                         ""offset"": 0
+                    }
+                }
+                ";
+
+                streamWriter.Write(jsonWS);
+                streamWriter.Flush();
+                streamWriter.Close();
+            }
+
+            var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+            DataTable dt;
+            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+            {
+                var result = streamReader.ReadToEnd().Replace("\"msg\": \"\",", "").Replace("\"code\": \"200\",", "").Replace("\"result\": ", "");
+                result = result.Substring(1, result.Length - 2);
+
+                var o = JsonConvert.DeserializeObject<List<DiaStok>>(result);
+
+                var jsonSerializerSettings = new JsonSerializerSettings();
+                jsonSerializerSettings.MissingMemberHandling = MissingMemberHandling.Ignore;
+
+                //dt = (DataTable)JsonConvert.DeserializeObject(o.ToString(), (typeof(DataTable)));
+
+                dt = CopyGenericToDataTable(o.ToArray(), new ArrayList() { "ExtensionData" });
+            }
+
+            DataSet ds = new DataSet();
+            ds.Tables.Add(dt);
+
+
+            yilad = "YIL";
+            basyil = dtBas.Year;
+            bityil = dtBit.Year;
+            ayad = "AY";
+            basay = dtBas.Month;
+            bitay = dtBit.Month;
+            string yazildi = Export(ds, false);
+
+            ev.WriteEntry(dtBas.Year.ToString() + "-" + dtBas.Month.ToString() + (yazildi != "" ? " Yılmaz Meşrubat stok verisi gönderildi." : " Yılmaz Meşrubat stok verisi gönderilemedi."), EventLogEntryType.Information);
+
+            return true;
+        }
+        public string YilmazSession()
+        {
+            string sURL = "https://yilmazmesrubat.ws.dia.com.tr/api/v3/sis/json";
+
+            var httpWebRequest = (HttpWebRequest)WebRequest.Create(sURL);
+            httpWebRequest.ContentType = "application/json";
+            httpWebRequest.Method = "POST";
+
+            using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
+            {
+
+                // SESSION ID MANUEL YAZILMALI
+                string jsonWS = @"
+                {""login"" :
+                    {
+                       ""username"": ""ws-ym"",
+                       ""password"": ""Ym123456."",
+                       ""disconnect_same_user"": true,
+                       ""params"": { ""apikey"": ""d7283da0-d7db-4294-9bd7-9786892ee005""}
+                    }
+                }";
+
+                streamWriter.Write(jsonWS);
+                streamWriter.Flush();
+                streamWriter.Close();
+            }
+            
+            var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+            var result = string.Empty;
+            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+            {
+                result = streamReader.ReadToEnd().Replace("{", "").Replace("}", "").Replace("\"msg\": \"", "").Replace("\",", "").Replace("\"code\": \"200", "").Replace("\"warnings\": []", "").Trim();
+            }
+
+            return result;
+        }
+        #endregion
 
         public string Export(DataSet ds, bool satis)
         {
@@ -334,21 +627,25 @@ namespace Sultanlar.ClassLib
 
                 if (https)
                 {
-                    wr = (HttpWebRequest)WebRequest.Create("https://www.ittihadteknoloji.com.tr/dis/bayiservis/SatisStok/" + bayikod +
+                    wr = (HttpWebRequest)WebRequest.Create("https://www.ittihadteknoloji.com.tr/dis/bayiservis/SatisStok2/" + bayikod +
                     "/" + (satis ? "Satis" : "Stok") +
                     "/" + (satis ? yilad : "-") +
-                    "/" + yil.ToString() +
+                    "/" + basyil.ToString() +
+                    "/" + bityil.ToString() +
                     "/" + (satis ? ayad : "-") +
-                    "/" + ay.ToString());
+                    "/" + basay.ToString() +
+                    "/" + bitay.ToString());
                 }
                 else
                 {
-                    wr = (HttpWebRequest)WebRequest.Create("http://www.ittihadteknoloji.com.tr/wcf/bayiservis.svc/web/Post?bayikod=" + bayikod +
+                    wr = (HttpWebRequest)WebRequest.Create("http://www.ittihadteknoloji.com.tr/wcf/bayiservis.svc/web/Post2?bayikod=" + bayikod +
                     "&satis=" + (satis ? "Satis" : "Stok") +
                     "&yilad=" + (satis ? yilad : "") +
-                    "&yil=" + yil.ToString() +
+                    "&basyil=" + basyil.ToString() +
+                    "&bityil=" + bityil.ToString() +
                     "&ayad=" + (satis ? ayad : "") +
-                    "&ay=" + ay.ToString());
+                    "&basay=" + basay.ToString() +
+                    "&bitay=" + bitay.ToString());
                 }
 
                 wr.Method = "POST";
@@ -370,7 +667,7 @@ namespace Sultanlar.ClassLib
             }
             catch (Exception ex)
             {
-                ev.WriteEntry(ex.Message, EventLogEntryType.Information);
+                ev.WriteEntry((satis ? "Satış" : "Stok") + ": " + ex.Message, EventLogEntryType.Information);
                 return "";
             }
 
@@ -416,5 +713,22 @@ namespace Sultanlar.ClassLib
 
             return result;
         }
+    }
+
+    public class DiaStok
+    {
+        [JsonIgnore]
+        public string __cellcolor { get { return ""; } }
+        public double fiili_stok_irs { get; set; }
+        public double fiili_stok { get; set; }
+        public string stokkartkodu { get; set; }
+        public double gercek_stok_fat { get; set; }
+        [JsonIgnore]
+        public string __format { get { return ""; } }
+        public double b2c_depomiktari { get; set; }
+        public double gercek_stok_irs { get; set; }
+        public double b2b_depomiktari { get; set; }
+        public double gercek_stok { get; set; }
+        public string aciklama { get; set; }
     }
 }

@@ -32,6 +32,10 @@ namespace Sultanlar.BayiWinServis
         string database;
         string userid;
         string password;
+        string server1;
+        string database1;
+        string userid1;
+        string password1;
         string querySatis;
         string queryStok;
         string yilAd;
@@ -39,6 +43,7 @@ namespace Sultanlar.BayiWinServis
         string ayAd;
         //string ay;
         bool https;
+        string db;
 
         protected override void OnStart(string[] args)
         {
@@ -51,6 +56,10 @@ namespace Sultanlar.BayiWinServis
             database = config.GetElementsByTagName("database")[0].InnerText;
             userid = config.GetElementsByTagName("userid")[0].InnerText;
             password = new Class1(ev, "").Decrypt(config.GetElementsByTagName("password")[0].InnerText);
+            server1 = config.GetElementsByTagName("server1")[0].InnerText;
+            database1 = config.GetElementsByTagName("database1")[0].InnerText;
+            userid1 = config.GetElementsByTagName("userid1")[0].InnerText;
+            password1 = new Class1(ev, "").Decrypt(config.GetElementsByTagName("password1")[0].InnerText);
             querySatis = config.GetElementsByTagName("querySatis")[0].InnerText;
             queryStok = config.GetElementsByTagName("queryStok")[0].InnerText;
             yilAd = config.GetElementsByTagName("yilad")[0].InnerText;
@@ -58,10 +67,13 @@ namespace Sultanlar.BayiWinServis
             ayAd = config.GetElementsByTagName("ayad")[0].InnerText;
             //ay = config.GetElementsByTagName("ay")[0].InnerText;
             https = Convert.ToBoolean(config.GetElementsByTagName("https")[0].InnerText);
+            db = config.GetElementsByTagName("db")[0].InnerText;
 
             ev = new EventLog();
-            ev.Source = "Sultanlar Bayii Servis";
-            cls = new Class1(ev, bayikod, server, database, userid, password, querySatis, queryStok, yilAd, DateTime.Now.Year, ayAd, DateTime.Now.Month, https);
+            ev.Source = "Sultanlar Bayi Servis";
+            DateTime baslangic = DateTime.Now.AddMonths(-3);
+            DateTime bitis = DateTime.Now;
+            cls = new Class1(ev, bayikod, server, database, userid, password, server1, database1, userid1, password1, querySatis, queryStok, yilAd, baslangic.Year, bitis.Year, ayAd, baslangic.Month, bitis.Month, https, db);
 
             tmr = new Timer(300000);
             tmr.Elapsed += Tmr_Elapsed;
@@ -71,6 +83,10 @@ namespace Sultanlar.BayiWinServis
 
         private void Tmr_Elapsed(object sender, ElapsedEventArgs e)
         {
+            DateTime baslangic = DateTime.Now.AddMonths(-3);
+            DateTime bitis = DateTime.Now;
+            cls = new Class1(ev, bayikod, server, database, userid, password, server1, database1, userid1, password1, querySatis, queryStok, yilAd, baslangic.Year, bitis.Year, ayAd, baslangic.Month, bitis.Month, https, db);
+
             DateTime sonGonderim = Convert.ToDateTime(config.GetElementsByTagName("lastSent")[0].InnerText);
             if (sonGonderim.ToShortDateString() == DateTime.Now.ToShortDateString()) // bugün gönderilmişse
             {

@@ -28,7 +28,7 @@ namespace Sultanlar.BayiWinApp
         private void Form1_Load(object sender, EventArgs e)
         {
             ev = new EventLog();
-            ev.Source = "Sultanlar Bayii App";
+            ev.Source = "Sultanlar Bayi App";
             /*Process prs = new Process();
             ProcessStartInfo startInfo = new ProcessStartInfo();
             startInfo.FileName = "cmd.exe";
@@ -51,6 +51,10 @@ namespace Sultanlar.BayiWinApp
             textBox3.Text = config.GetElementsByTagName("database")[0].InnerText;
             textBox4.Text = config.GetElementsByTagName("userid")[0].InnerText;
             textBox5.Text = new Class1(ev, "").Decrypt(config.GetElementsByTagName("password")[0].InnerText);
+            textBox14.Text = config.GetElementsByTagName("server1")[0].InnerText;
+            textBox15.Text = config.GetElementsByTagName("database1")[0].InnerText;
+            textBox16.Text = config.GetElementsByTagName("userid1")[0].InnerText;
+            textBox17.Text = new Class1(ev, "").Decrypt(config.GetElementsByTagName("password1")[0].InnerText);
             textBox6.Text = config.GetElementsByTagName("querySatis")[0].InnerText;
             textBox7.Text = config.GetElementsByTagName("queryStok")[0].InnerText;
             textBox10.Text = config.GetElementsByTagName("yilad")[0].InnerText;
@@ -59,6 +63,17 @@ namespace Sultanlar.BayiWinApp
             textBox9.Text = config.GetElementsByTagName("ay")[0].InnerText;
             checkBox1.Checked = Convert.ToBoolean(config.GetElementsByTagName("https")[0].InnerText);
             label8.Text = "Son gönderim: " + config.GetElementsByTagName("lastSent")[0].InnerText;
+
+            if (config.GetElementsByTagName("db")[0].InnerText == "sql")
+            {
+                radioButton1.Checked = true;
+                radioButton2.Checked = false;
+            }
+            else
+            {
+                radioButton2.Checked = true;
+                radioButton1.Checked = false;
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -68,6 +83,10 @@ namespace Sultanlar.BayiWinApp
             config.GetElementsByTagName("database")[0].InnerText = textBox3.Text.Trim();
             config.GetElementsByTagName("userid")[0].InnerText = textBox4.Text.Trim();
             config.GetElementsByTagName("password")[0].InnerText = new Class1(ev, "").Enrypt(textBox5.Text);
+            config.GetElementsByTagName("server1")[0].InnerText = textBox14.Text.Trim();
+            config.GetElementsByTagName("database1")[0].InnerText = textBox15.Text.Trim();
+            config.GetElementsByTagName("userid1")[0].InnerText = textBox16.Text.Trim();
+            config.GetElementsByTagName("password1")[0].InnerText = new Class1(ev, "").Enrypt(textBox17.Text);
             config.GetElementsByTagName("querySatis")[0].InnerText = textBox6.Text.Trim();
             config.GetElementsByTagName("queryStok")[0].InnerText = textBox7.Text.Trim();
             config.GetElementsByTagName("yilad")[0].InnerText = textBox10.Text.Trim();
@@ -75,6 +94,7 @@ namespace Sultanlar.BayiWinApp
             config.GetElementsByTagName("ayad")[0].InnerText = textBox11.Text.Trim();
             config.GetElementsByTagName("ay")[0].InnerText = textBox9.Text.Trim();
             config.GetElementsByTagName("https")[0].InnerText = checkBox1.Checked ? "true" : "false";
+            config.GetElementsByTagName("db")[0].InnerText = radioButton1.Checked ? "sql" : "firebird";
             config.Save("config.xml");
             MessageBox.Show("Kaydedildi");
         }
@@ -97,6 +117,21 @@ namespace Sultanlar.BayiWinApp
             if (Install(assembly, true))
                 MessageBox.Show("İşlem başarılı.");
         }
+        public static void UnInstallService(string serviceName, Assembly assembly, bool uyariverme)
+        {
+            if (IsServiceInstalled(serviceName))
+            {
+                if (uyariverme || MessageBox.Show("Servisi kaldırmak istediğinize emin misiniz?", "Uyarı", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    if (UnInstall(assembly))
+                        MessageBox.Show("İşlem başarılı.");
+                }
+                else
+                {
+                    return;
+                }
+            }
+        }
 
         public static bool Install(Assembly assembly, bool install)
         {
@@ -114,6 +149,29 @@ namespace Sultanlar.BayiWinApp
                     {
                         installer.Uninstall(state);
                     }
+                }
+                catch (Exception ex)
+                {
+                    try
+                    {
+                        installer.Rollback(state);
+                    }
+                    catch { }
+                    MessageBox.Show(ex.Message);
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public static bool UnInstall(Assembly assembly)
+        {
+            using (AssemblyInstaller installer = GetInstaller(assembly))
+            {
+                IDictionary state = new Hashtable();
+                try
+                {
+                    installer.Uninstall(state);
                 }
                 catch (Exception ex)
                 {
@@ -158,23 +216,25 @@ namespace Sultanlar.BayiWinApp
         private void button2_Click(object sender, EventArgs e)
         {
             string query = textBox6.Text.Trim();
-            Class1 cls = new Class1(ev, textBox1.Text.Trim(), textBox2.Text.Trim(), textBox3.Text.Trim(), textBox4.Text.Trim(), textBox5.Text.Trim(), query, textBox7.Text.Trim(),
-                textBox10.Text.Trim(), Convert.ToInt32(textBox8.Text.Trim()), textBox11.Text.Trim(), Convert.ToInt32(textBox9.Text.Trim()), checkBox1.Checked);
+            Class1 cls = new Class1(ev, textBox1.Text.Trim(), textBox2.Text.Trim(), textBox3.Text.Trim(), textBox4.Text.Trim(), textBox5.Text.Trim(),
+                textBox14.Text.Trim(), textBox15.Text.Trim(), textBox16.Text.Trim(), textBox17.Text.Trim(), query, textBox7.Text.Trim(),
+                textBox10.Text.Trim(), Convert.ToInt32(textBox8.Text.Trim()), Convert.ToInt32(textBox18.Text.Trim()), textBox11.Text.Trim(), Convert.ToInt32(textBox9.Text.Trim()), Convert.ToInt32(textBox13.Text.Trim()), checkBox1.Checked, radioButton1.Checked ? "sql" : "firebird");
             MessageBox.Show(cls.GetData(true));
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
             string query = textBox7.Text.Trim();
-            Class1 cls = new Class1(ev, textBox1.Text.Trim(), textBox2.Text.Trim(), textBox3.Text.Trim(), textBox4.Text.Trim(), textBox5.Text.Trim(), textBox6.Text.Trim(), query,
-                textBox10.Text.Trim(), Convert.ToInt32(textBox8.Text.Trim()), textBox11.Text.Trim(), Convert.ToInt32(textBox9.Text.Trim()), checkBox1.Checked);
+            Class1 cls = new Class1(ev, textBox1.Text.Trim(), textBox2.Text.Trim(), textBox3.Text.Trim(), textBox4.Text.Trim(), textBox5.Text.Trim(),
+                textBox14.Text.Trim(), textBox15.Text.Trim(), textBox16.Text.Trim(), textBox17.Text.Trim(), textBox6.Text.Trim(), query,
+                textBox10.Text.Trim(), Convert.ToInt32(textBox8.Text.Trim()), Convert.ToInt32(textBox18.Text.Trim()), textBox11.Text.Trim(), Convert.ToInt32(textBox9.Text.Trim()), Convert.ToInt32(textBox13.Text.Trim()), checkBox1.Checked, radioButton1.Checked ? "sql" : "firebird");
             MessageBox.Show(cls.GetData(false));
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
             Assembly assembly = Assembly.LoadFrom("Sultanlar.BayiWinServis.exe");
-            InstallService("Sultanlar Bayii Servis", assembly);
+            InstallService("Sultanlar Bayi Servis", assembly);
 
             /*Process process = new Process();
             ProcessStartInfo startInfo = new ProcessStartInfo();
@@ -189,7 +249,7 @@ namespace Sultanlar.BayiWinApp
         {
             try
             {
-                ServiceController service = new ServiceController("Sultanlar Bayii Servis");
+                ServiceController service = new ServiceController("Sultanlar Bayi Servis");
                 if (service.Status == ServiceControllerStatus.Stopped || service.Status == ServiceControllerStatus.StopPending)
                 {
                     service.Start();
@@ -210,7 +270,7 @@ namespace Sultanlar.BayiWinApp
         {
             try
             {
-                ServiceController service = new ServiceController("Sultanlar Bayii Servis");
+                ServiceController service = new ServiceController("Sultanlar Bayi Servis");
                 if (service.Status == ServiceControllerStatus.Running)
                 {
                     service.Stop();
@@ -256,6 +316,103 @@ namespace Sultanlar.BayiWinApp
         {
             Class1 cls = new Class1(ev, "1052689");
             cls.PekerGonder();
+
+
+            /*string configPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+            XmlDocument config = new XmlDocument();
+            config.Load(configPath + "\\config.xml");
+
+            string bayikod = config.GetElementsByTagName("bayikod")[0].InnerText;
+            string server = config.GetElementsByTagName("server")[0].InnerText;
+            string database = config.GetElementsByTagName("database")[0].InnerText;
+            string userid = config.GetElementsByTagName("userid")[0].InnerText;
+            string password = new Class1(ev, "").Decrypt(config.GetElementsByTagName("password")[0].InnerText);
+            string server1 = config.GetElementsByTagName("server1")[0].InnerText;
+            string database1 = config.GetElementsByTagName("database1")[0].InnerText;
+            string userid1 = config.GetElementsByTagName("userid1")[0].InnerText;
+            string password1 = new Class1(ev, "").Decrypt(config.GetElementsByTagName("password1")[0].InnerText);
+            string querySatis = config.GetElementsByTagName("querySatis")[0].InnerText;
+            string queryStok = config.GetElementsByTagName("queryStok")[0].InnerText;
+            string yilAd = config.GetElementsByTagName("yilad")[0].InnerText;
+            //yil = config.GetElementsByTagName("yil")[0].InnerText;
+            string ayAd = config.GetElementsByTagName("ayad")[0].InnerText;
+            //ay = config.GetElementsByTagName("ay")[0].InnerText;
+            bool https = Convert.ToBoolean(config.GetElementsByTagName("https")[0].InnerText);
+            string db = config.GetElementsByTagName("db")[0].InnerText;
+
+            ev = new EventLog();
+            ev.Source = "Sultanlar Bayi Servis";
+            Class1 cls = new Class1(ev, bayikod, server, database, userid, password, server1, database1, userid1, password1, querySatis, queryStok, yilAd, DateTime.Now.Year, ayAd, DateTime.Now.Month, https, db);
+
+            string satis = cls.GetData(true);*/
+        }
+
+        private void button10_Click(object sender, EventArgs e)
+        {
+            string query = textBox6.Text.Trim();
+            Class1 cls = new Class1(ev, textBox1.Text.Trim(), textBox2.Text.Trim(), textBox3.Text.Trim(), textBox4.Text.Trim(), textBox5.Text.Trim(),
+                textBox14.Text.Trim(), textBox15.Text.Trim(), textBox16.Text.Trim(), textBox17.Text.Trim(), query, textBox7.Text.Trim(),
+                textBox10.Text.Trim(), Convert.ToInt32(textBox8.Text.Trim()), Convert.ToInt32(textBox18.Text.Trim()), textBox11.Text.Trim(), Convert.ToInt32(textBox9.Text.Trim()), Convert.ToInt32(textBox13.Text.Trim()), checkBox1.Checked, radioButton1.Checked ? "sql" : "firebird");
+            DataSet ds = new DataSet();
+            string sonuc = cls.GetDataFromSource(ds, true);
+            if (sonuc == "")
+            {
+                Form2 frm = new Form2(ds);
+                frm.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show(sonuc);
+            }
+        }
+
+        private void button11_Click(object sender, EventArgs e)
+        {
+            string query = textBox7.Text.Trim();
+            Class1 cls = new Class1(ev, textBox1.Text.Trim(), textBox2.Text.Trim(), textBox3.Text.Trim(), textBox4.Text.Trim(), textBox5.Text.Trim(),
+                textBox14.Text.Trim(), textBox15.Text.Trim(), textBox16.Text.Trim(), textBox17.Text.Trim(), textBox6.Text.Trim(), query,
+                textBox10.Text.Trim(), Convert.ToInt32(textBox8.Text.Trim()), Convert.ToInt32(textBox18.Text.Trim()), textBox11.Text.Trim(), Convert.ToInt32(textBox9.Text.Trim()), Convert.ToInt32(textBox13.Text.Trim()), checkBox1.Checked, radioButton1.Checked ? "sql" : "firebird");
+            DataSet ds = new DataSet();
+            string sonuc = cls.GetDataFromSource(ds, false);
+            if (sonuc == "")
+            {
+                Form2 frm = new Form2(ds);
+                frm.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show(sonuc);
+            }
+        }
+
+        private void radioButton2_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButton2.Checked)
+            {
+                textBox5.Text = "masterkey";
+                textBox17.Text = "masterkey";
+            }
+        }
+
+        private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButton1.Checked)
+            {
+                textBox5.Text = new Class1(ev, "").Decrypt(config.GetElementsByTagName("password")[0].InnerText);
+                textBox17.Text = new Class1(ev, "").Decrypt(config.GetElementsByTagName("password1")[0].InnerText);
+            }
+        }
+
+        private void button12_Click(object sender, EventArgs e)
+        {
+            Assembly assembly = Assembly.LoadFrom("Sultanlar.BayiWinServis.exe");
+            UnInstallService("Sultanlar Bayii Servis", assembly, true);
+            Assembly assembly1 = Assembly.LoadFrom("Sultanlar.BayiWinServis.exe");
+            UnInstallService("Sultanlar Bayi Servis", assembly1, false);
+        }
+
+        private void button13_Click(object sender, EventArgs e)
+        {
         }
     }
 }

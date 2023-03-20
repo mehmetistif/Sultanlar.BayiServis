@@ -5,6 +5,10 @@
   <database>DisVeri</database>
   <userid>rapor</userid>
   <password>3iYdhCIYfqYuoV/lEVu4sw==</password>
+  <server1>10.10.41.2</server1>
+  <database1>DisVeri</database1>
+  <userid1>rapor</userid1>
+  <password1>3iYdhCIYfqYuoV/lEVu4sw==</password1>
   <querySatis>SELECT [YIL],[AY],[FAT_NO],[FAT_TAR],[SAT_TEM],[CH_KOD],[IL],[ILCE][MAL_KOD],[URT_KOD],[MAL_ACIKLAMA],[ADET],[ANABIRIM],[NET_TOP],[KDV_TOP],[KDVDAHIL] FROM tbl_1001327_Satis</querySatis>
   <queryStok>SELECT * FROM tbl_1001327_Stok</queryStok>
   <yilad>YIL</yilad>
@@ -13,4 +17,5 @@
   <ay>3</ay>
   <lastSent>2022/03/28</lastSent>
   <https>false</https>
+  <db>sql</db>
 </configuration>

@@ -45,6 +45,10 @@ namespace Sultanlar.WinServis
                 Class1 cls1 = new Class1(ev, "1052689");
                 cls1.PekerGonder();
                 cls1.PekerStokGonder();
+
+                Class1 cls = new Class1(ev, "1018538");
+                cls.YilmazGonder();
+                cls.YilmazStokGonder();
             }
         }
 

@@ -29,8 +29,11 @@ namespace Sultanlar.BayiWinServis
         /// </summary>
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
-            this.ServiceName = "Sultanlar Bayii Servis";
+            // 
+            // Service1
+            // 
+            this.ServiceName = "Sultanlar Bayi Servis";
+
         }
 
         #endregion

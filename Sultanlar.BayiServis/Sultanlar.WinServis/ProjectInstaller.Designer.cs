@@ -40,7 +40,7 @@ namespace Sultanlar.WinServis
             // 
             // serviceInstaller1
             // 
-            this.serviceInstaller1.ServiceName = "Sultanlar Bayii In Service";
+            this.serviceInstaller1.ServiceName = "Sultanlar Bayi In Service";
             // 
             // ProjectInstaller
             // 
