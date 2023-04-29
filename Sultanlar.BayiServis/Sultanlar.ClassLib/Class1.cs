@@ -466,7 +466,7 @@ namespace Sultanlar.ClassLib
                     {""session_id"": """ + YilmazSession() + @""",
                      ""firma_kodu"": 1,
                      ""donem_kodu"": 3,
-                     ""filters"":[{""field"": ""stokkartmarka"", ""operator"": ""="", ""value"": ""SULTANLAR""},{ ""field"": ""tarih"", ""operator"": "">="", ""value"": """ + dtBas.Year.ToString() + @"-" + (dtBas.Month.ToString().Length == 1 ? "0" : "") + dtBas.Month.ToString() + @"-01 00:00:00.00""}],
+                     ""filters"":[{""field"": ""stokkartmarka"", ""operator"": ""IN"", ""value"": ""BANDUFF,SULTANLAR""},{ ""field"": ""tarih"", ""operator"": "">="", ""value"": """ + dtBas.Year.ToString() + @"-" + (dtBas.Month.ToString().Length == 1 ? "0" : "") + dtBas.Month.ToString() + @"-01 00:00:00.00""}],
                      ""sorts"": """",
                      ""params"": {
                         ""selectedcolumns"": [""turu"", ""turuack"", ""kartozelkodu2"", ""satiselemani"", ""carikodu"", ""unvan"", ""sevkadresi"", ""tarih"", ""belgeno"", ""belgeno2"", ""kartkodu"", ""kartaciklama"", ""kdv"", ""fatanabirimi"", ""anamiktar"", ""birimfiyati"", ""indirimtoplam"", ""sonbirimfiyati"", ""kdvtutari"", ""toplamtutar"", ""kdvdurumu"", ""iptal""]
@@ -529,7 +529,7 @@ namespace Sultanlar.ClassLib
                          ""session_id"": """ + YilmazSession() + @""",
                          ""firma_kodu"": 1,
                          ""donem_kodu"": 3,
-                         ""filters"":[{ ""field"": ""marka"", ""operator"": ""="", ""value"": ""SULTANLAR""}],
+                         ""filters"":[{ ""field"": ""marka"", ""operator"": ""IN"", ""value"": ""BANDUFF,SULTANLAR""}],
                          ""sorts"": [],
                          ""params"": {
                             ""_key"": 4597817,

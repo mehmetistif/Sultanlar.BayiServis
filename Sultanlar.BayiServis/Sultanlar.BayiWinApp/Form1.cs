@@ -314,8 +314,8 @@ namespace Sultanlar.BayiWinApp
 
         private void button9_Click(object sender, EventArgs e)
         {
-            Class1 cls = new Class1(ev, "1052689");
-            cls.PekerGonder();
+            Class1 cls = new Class1(ev, "1018538");
+            cls.YilmazStokGonder();
 
 
             /*string configPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
