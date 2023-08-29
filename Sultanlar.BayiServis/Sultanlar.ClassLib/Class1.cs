@@ -104,11 +104,11 @@ namespace Sultanlar.ClassLib
             try
             {
                 baslangic = DateTime.ParseExact(BasYil + "-" + (BasAy > 9 ? BasAy.ToString() : "0" + BasAy.ToString()) + "-01", "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture); //Convert.ToDateTime("01." + BasAy + "." + BasYil);
-                bitis = DateTime.ParseExact(BitYil + "-" + (BitAy > 9 ? BasAy.ToString() : "0" + BitAy.ToString()) + "-01", "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture).AddMonths(1); ; //Convert.ToDateTime("01." + BitAy + "." + BitYil).AddMonths(1);
+                bitis = DateTime.ParseExact(BitYil + "-" + (BitAy > 9 ? BitAy.ToString() : "0" + BitAy.ToString()) + "-01", "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture).AddMonths(1); ; //Convert.ToDateTime("01." + BitAy + "." + BitYil).AddMonths(1);
             }
             catch (Exception ex)
             {
-                ev.WriteEntry("[Hata] " + BasYil + "-" + (BasAy > 9 ? BasAy.ToString() : "0" + BasAy.ToString()) + "-01 - " + BitYil + "-" + (BitAy > 9 ? BasAy.ToString() : "0" + BitAy.ToString()) + "-01 : " + ex.Message, EventLogEntryType.Information);
+                ev.WriteEntry("[Hata] " + BasYil + "-" + (BasAy > 9 ? BasAy.ToString() : "0" + BasAy.ToString()) + "-01 - " + BitYil + "-" + (BitAy > 9 ? BitAy.ToString() : "0" + BitAy.ToString()) + "-01 : " + ex.Message, EventLogEntryType.Information);
             }
             
 
