@@ -38,6 +38,7 @@ namespace Sultanlar.BayiWinServis
         string password1;
         string querySatis;
         string queryStok;
+        string queryCari;
         string yilAd;
         //string yil;
         string ayAd;
@@ -62,6 +63,7 @@ namespace Sultanlar.BayiWinServis
             password1 = new Class1(ev, "").Decrypt(config.GetElementsByTagName("password1")[0].InnerText);
             querySatis = config.GetElementsByTagName("querySatis")[0].InnerText;
             queryStok = config.GetElementsByTagName("queryStok")[0].InnerText;
+            queryCari = config.GetElementsByTagName("queryCari")[0].InnerText;
             yilAd = config.GetElementsByTagName("yilad")[0].InnerText;
             //yil = config.GetElementsByTagName("yil")[0].InnerText;
             ayAd = config.GetElementsByTagName("ayad")[0].InnerText;
@@ -73,7 +75,7 @@ namespace Sultanlar.BayiWinServis
             ev.Source = "Sultanlar Bayi Servis";
             DateTime baslangic = DateTime.Now.AddMonths(-3);
             DateTime bitis = DateTime.Now;
-            cls = new Class1(ev, bayikod, server, database, userid, password, server1, database1, userid1, password1, querySatis, queryStok, yilAd, baslangic.Year, bitis.Year, ayAd, baslangic.Month, bitis.Month, https, db);
+            cls = new Class1(ev, bayikod, server, database, userid, password, server1, database1, userid1, password1, querySatis, queryStok, queryCari, yilAd, baslangic.Year, bitis.Year, ayAd, baslangic.Month, bitis.Month, https, db);
 
             tmr = new Timer(300000);
             tmr.Elapsed += Tmr_Elapsed;
@@ -85,7 +87,7 @@ namespace Sultanlar.BayiWinServis
         {
             DateTime baslangic = DateTime.Now.AddMonths(-3);
             DateTime bitis = DateTime.Now;
-            cls = new Class1(ev, bayikod, server, database, userid, password, server1, database1, userid1, password1, querySatis, queryStok, yilAd, baslangic.Year, bitis.Year, ayAd, baslangic.Month, bitis.Month, https, db);
+            cls = new Class1(ev, bayikod, server, database, userid, password, server1, database1, userid1, password1, querySatis, queryStok, queryCari, yilAd, baslangic.Year, bitis.Year, ayAd, baslangic.Month, bitis.Month, https, db);
 
             DateTime sonGonderim = Convert.ToDateTime(config.GetElementsByTagName("lastSent")[0].InnerText);
             if (sonGonderim.ToShortDateString() == DateTime.Now.ToShortDateString()) // bugün gönderilmişse
@@ -104,8 +106,9 @@ namespace Sultanlar.BayiWinServis
 
         private void Gonder()
         {
-            string satis = cls.GetData(true);
-            string stok = cls.GetData(false);
+            string satis = cls.GetData(1);
+            string stok = cls.GetData(2);
+            string cari = queryCari != "" ? cls.GetData(3) : "";
             if (satis == string.Empty && stok == string.Empty) // satış ve stok gönderilemedi
             {
                 return;

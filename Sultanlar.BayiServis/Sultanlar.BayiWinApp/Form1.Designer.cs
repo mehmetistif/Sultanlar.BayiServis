@@ -80,7 +80,14 @@ namespace Sultanlar.BayiWinApp
             this.label15 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
+            this.radioButton3 = new System.Windows.Forms.RadioButton();
+            this.radioButton4 = new System.Windows.Forms.RadioButton();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.txtCari = new System.Windows.Forms.TextBox();
+            this.btnCari = new System.Windows.Forms.Button();
+            this.button13 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
+            this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // textBox1
@@ -204,9 +211,9 @@ namespace Sultanlar.BayiWinApp
             this.label7.AutoSize = true;
             this.label7.Location = new System.Drawing.Point(14, 422);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(63, 13);
+            this.label7.Size = new System.Drawing.Size(84, 13);
             this.label7.TabIndex = 1;
-            this.label7.Text = "Stok Query:";
+            this.label7.Text = "Stok-Cari Query:";
             // 
             // textBox8
             // 
@@ -342,7 +349,7 @@ namespace Sultanlar.BayiWinApp
             // 
             // button9
             // 
-            this.button9.Location = new System.Drawing.Point(110, 607);
+            this.button9.Location = new System.Drawing.Point(204, 633);
             this.button9.Name = "button9";
             this.button9.Size = new System.Drawing.Size(75, 23);
             this.button9.TabIndex = 16;
@@ -381,12 +388,10 @@ namespace Sultanlar.BayiWinApp
             // radioButton1
             // 
             this.radioButton1.AutoSize = true;
-            this.radioButton1.Checked = true;
             this.radioButton1.Location = new System.Drawing.Point(220, 4);
             this.radioButton1.Name = "radioButton1";
             this.radioButton1.Size = new System.Drawing.Size(46, 17);
             this.radioButton1.TabIndex = 19;
-            this.radioButton1.TabStop = true;
             this.radioButton1.Text = "SQL";
             this.radioButton1.UseVisualStyleBackColor = true;
             this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
@@ -436,36 +441,36 @@ namespace Sultanlar.BayiWinApp
             this.label10.AutoSize = true;
             this.label10.Location = new System.Drawing.Point(14, 318);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(72, 13);
+            this.label10.Size = new System.Drawing.Size(93, 13);
             this.label10.TabIndex = 1;
-            this.label10.Text = "Stok Sunucu:";
+            this.label10.Text = "Stok-Cari Sunucu:";
             // 
             // label11
             // 
             this.label11.AutoSize = true;
             this.label11.Location = new System.Drawing.Point(14, 344);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(82, 13);
+            this.label11.Size = new System.Drawing.Size(69, 13);
             this.label11.TabIndex = 1;
-            this.label11.Text = "Stok Veritabanı:";
+            this.label11.Text = "Stok-Cari Vt.:";
             // 
             // label12
             // 
             this.label12.AutoSize = true;
             this.label12.Location = new System.Drawing.Point(14, 370);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(74, 13);
+            this.label12.Size = new System.Drawing.Size(95, 13);
             this.label12.TabIndex = 1;
-            this.label12.Text = "Stok Kullanıcı:";
+            this.label12.Text = "Stok-Cari Kullanıcı:";
             // 
             // label13
             // 
             this.label13.AutoSize = true;
             this.label13.Location = new System.Drawing.Point(14, 396);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(56, 13);
+            this.label13.Size = new System.Drawing.Size(77, 13);
             this.label13.TabIndex = 1;
-            this.label13.Text = "Stok Şifre:";
+            this.label13.Text = "Stok-Cari Şifre:";
             // 
             // button10
             // 
@@ -545,11 +550,76 @@ namespace Sultanlar.BayiWinApp
             this.label17.TabIndex = 1;
             this.label17.Text = "bit";
             // 
+            // radioButton3
+            // 
+            this.radioButton3.AutoSize = true;
+            this.radioButton3.Checked = true;
+            this.radioButton3.Location = new System.Drawing.Point(15, 3);
+            this.radioButton3.Name = "radioButton3";
+            this.radioButton3.Size = new System.Drawing.Size(47, 17);
+            this.radioButton3.TabIndex = 21;
+            this.radioButton3.TabStop = true;
+            this.radioButton3.Text = "Stok";
+            this.radioButton3.UseVisualStyleBackColor = true;
+            this.radioButton3.CheckedChanged += new System.EventHandler(this.radioButton3_CheckedChanged);
+            // 
+            // radioButton4
+            // 
+            this.radioButton4.AutoSize = true;
+            this.radioButton4.Location = new System.Drawing.Point(15, 26);
+            this.radioButton4.Name = "radioButton4";
+            this.radioButton4.Size = new System.Drawing.Size(43, 17);
+            this.radioButton4.TabIndex = 21;
+            this.radioButton4.Text = "Cari";
+            this.radioButton4.UseVisualStyleBackColor = true;
+            this.radioButton4.CheckedChanged += new System.EventHandler(this.radioButton3_CheckedChanged);
+            // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.radioButton3);
+            this.panel2.Controls.Add(this.radioButton4);
+            this.panel2.Location = new System.Drawing.Point(21, 438);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(77, 47);
+            this.panel2.TabIndex = 22;
+            // 
+            // txtCari
+            // 
+            this.txtCari.Location = new System.Drawing.Point(110, 422);
+            this.txtCari.Multiline = true;
+            this.txtCari.Name = "txtCari";
+            this.txtCari.Size = new System.Drawing.Size(319, 153);
+            this.txtCari.TabIndex = 10;
+            this.txtCari.Visible = false;
+            // 
+            // btnCari
+            // 
+            this.btnCari.Location = new System.Drawing.Point(408, 551);
+            this.btnCari.Name = "btnCari";
+            this.btnCari.Size = new System.Drawing.Size(20, 23);
+            this.btnCari.TabIndex = 20;
+            this.btnCari.Text = ">";
+            this.btnCari.UseVisualStyleBackColor = true;
+            this.btnCari.Visible = false;
+            this.btnCari.Click += new System.EventHandler(this.btnCari_Click);
+            // 
+            // button13
+            // 
+            this.button13.Location = new System.Drawing.Point(110, 607);
+            this.button13.Name = "button13";
+            this.button13.Size = new System.Drawing.Size(88, 23);
+            this.button13.TabIndex = 13;
+            this.button13.Text = "Cari Gönder";
+            this.button13.UseVisualStyleBackColor = true;
+            this.button13.Click += new System.EventHandler(this.button13_Click_1);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(441, 656);
+            this.Controls.Add(this.panel2);
+            this.Controls.Add(this.btnCari);
             this.Controls.Add(this.button11);
             this.Controls.Add(this.button10);
             this.Controls.Add(this.radioButton2);
@@ -560,6 +630,7 @@ namespace Sultanlar.BayiWinApp
             this.Controls.Add(this.button9);
             this.Controls.Add(this.button7);
             this.Controls.Add(this.label8);
+            this.Controls.Add(this.button13);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button6);
             this.Controls.Add(this.button5);
@@ -583,6 +654,7 @@ namespace Sultanlar.BayiWinApp
             this.Controls.Add(this.label10);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
+            this.Controls.Add(this.txtCari);
             this.Controls.Add(this.textBox7);
             this.Controls.Add(this.textBox6);
             this.Controls.Add(this.textBox13);
@@ -608,6 +680,8 @@ namespace Sultanlar.BayiWinApp
             this.Load += new System.EventHandler(this.Form1_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -666,6 +740,12 @@ namespace Sultanlar.BayiWinApp
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.RadioButton radioButton3;
+        private System.Windows.Forms.RadioButton radioButton4;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.TextBox txtCari;
+        private System.Windows.Forms.Button btnCari;
+        private System.Windows.Forms.Button button13;
     }
 }
 

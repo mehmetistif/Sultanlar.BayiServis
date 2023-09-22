@@ -28,6 +28,7 @@ namespace Sultanlar.ClassLib
         private string password1;
         private string querySatis;
         private string queryStok;
+        private string queryCari;
         private string yilad;
         private int basyil;
         private int bityil;
@@ -74,7 +75,7 @@ namespace Sultanlar.ClassLib
                 QuerySatis + " WHERE CAST(CAST(" + AyAd + " AS VARCHAR(100)) || '.01.' || CAST(" + YilAd + " AS VARCHAR(100)) AS DATE) >= '" + baslangic.Month + ".01." + baslangic.Year + "'";
         }*/
 
-        public Class1(EventLog Ev, string Bayikod, string Server, string Database, string Userid, string Password, string Server1, string Database1, string Userid1, string Password1, string QuerySatis, string QueryStok, string YilAd, int BasYil, int BitYil, string AyAd, int BasAy, int BitAy, bool Https, string Db)
+        public Class1(EventLog Ev, string Bayikod, string Server, string Database, string Userid, string Password, string Server1, string Database1, string Userid1, string Password1, string QuerySatis, string QueryStok, string QueryCari, string YilAd, int BasYil, int BitYil, string AyAd, int BasAy, int BitAy, bool Https, string Db)
         {
             ev = Ev;
 
@@ -89,6 +90,8 @@ namespace Sultanlar.ClassLib
             password1 = Password1;
 
             queryStok = QueryStok;
+            queryCari = QueryCari;
+
             yilad = YilAd;
             basyil = BasYil;
             bityil = BitYil;
@@ -145,48 +148,58 @@ namespace Sultanlar.ClassLib
         }
         #endregion
 
-        public string GetData(bool satis)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tur">1: satis, 2: stok, 3: cari</param>
+        /// <returns></returns>
+        public string GetData(int tur)
         {
             DataSet ds = new DataSet();
-            string sonuc = GetDataFromSource(ds, satis);
+            string sonuc = GetDataFromSource(ds, tur);
             if (sonuc != "")
                 return sonuc;
 
-            string donendeger = Export(ds, satis);
+            string donendeger = Export(ds, tur);
 
-            string sat = satis ? "Satış" : "Stok";
+            string sat = tur == 1 ? "Satış" : tur == 2 ? "Stok" : tur == 3 ? "Cari" : "";
             ev.WriteEntry(donendeger != "" ? sat + " verisi gönderildi." : sat + " verisi gönderilemedi.", EventLogEntryType.Information);
 
             return donendeger;
         }
-
-        public string GetDataFromSource(DataSet ds, bool satis)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ds"></param>
+        /// <param name="tur">1: satis, 2: stok, 3: cari</param>
+        /// <returns></returns>
+        public string GetDataFromSource(DataSet ds, int tur)
         {
-            string Server = satis ? server : server1;
-            string Database = satis ? database : database1;
-            string Userid = satis ? userid : userid1;
-            string Password = satis ? password : password1;
+            string Server = tur == 1 ? server : server1;
+            string Database = tur == 1 ? database : database1;
+            string Userid = tur == 1 ? userid : userid1;
+            string Password = tur == 1 ? password : password1;
 
             try
             {
                 if (db == "sql")
                 {
                     SqlConnection conn = new SqlConnection("Server=" + Server + "; Database=" + Database + "; User Id=" + Userid + "; Password=" + Password + "; Trusted_Connection=False;");
-                    SqlDataAdapter da = new SqlDataAdapter(satis ? querySatis : queryStok, conn);
+                    SqlDataAdapter da = new SqlDataAdapter(tur == 1 ? querySatis : tur == 2 ? queryStok : tur == 3 ? queryCari : "", conn);
                     da.SelectCommand.CommandTimeout = 600;
                     da.Fill(ds);
                 }
                 else
                 {
                     FbConnection conn = new FbConnection("User=" + Userid + ";Password=" + Password + ";Database=" + Database + ";DataSource=" + Server + ";Port=3050;Dialect=3;Charset=WIN1254;Role=;Connection lifetime=15;Pooling=true;MinPoolSize=0;MaxPoolSize=50;Packet Size=8192;ServerType = 0;");
-                    FbDataAdapter da = new FbDataAdapter(satis ? querySatis : queryStok, conn);
+                    FbDataAdapter da = new FbDataAdapter(tur == 1 ? querySatis : tur == 2 ? queryStok : tur == 3 ? queryCari : "", conn);
                     da.SelectCommand.CommandTimeout = 600;
                     da.Fill(ds);
                 }
             }
             catch (Exception ex)
             {
-                ev.WriteEntry((satis ? "Satış" : "Stok") + ": " + ex.Message, EventLogEntryType.Information);
+                ev.WriteEntry((tur == 1 ? "Satış" : tur == 2 ? "Stok" : tur == 3 ? "Cari" : "") + ": " + ex.Message, EventLogEntryType.Information);
                 return ex.Message;
             }
 
@@ -216,7 +229,7 @@ namespace Sultanlar.ClassLib
             bityil = dtBas.Year;
             ayad = "AY";
             bitay = dtBas.Month;
-            string yazildi = Export(ds, true);
+            string yazildi = Export(ds, 1);
 
             ev.WriteEntry(dtBas.Year.ToString() + "-" + dtBas.Month.ToString() + (yazildi != "" ? " Kaan Gıda satış verisi gönderildi." : " Kaan Gıda satış verisi gönderilemedi."), EventLogEntryType.Information);
 
@@ -261,7 +274,7 @@ namespace Sultanlar.ClassLib
             bityil = DateTime.Now.Year;
             ayad = "AY";
             bitay = DateTime.Now.Month;
-            string yazildi = Export(ds, false);
+            string yazildi = Export(ds, 2);
 
             //ev.WriteEntry(DateTime.Now.ToString() + (yazildi != "" ? " Kaan Gıda stok verisi gönderildi." : " Kaan Gıda satış stok gönderilemedi."), EventLogEntryType.Information);
 
@@ -326,7 +339,7 @@ namespace Sultanlar.ClassLib
             ayad = "AY";
             basay = dtBas.Month;
             bitay = dtBit.Month;
-            string yazildi = Export(ds, true);
+            string yazildi = Export(ds, 1);
 
             ev.WriteEntry(dtBas.Year.ToString() + "-" + dtBas.Month.ToString() + (yazildi != "" ? " Peker Gıda satış verisi gönderildi." : " Peker Gıda satış verisi gönderilemedi."), EventLogEntryType.Information);
 
@@ -400,7 +413,7 @@ namespace Sultanlar.ClassLib
             ayad = "AY";
             basay = dtBas.Month;
             bitay = dtBit.Month;
-            string yazildi = Export(ds, false);
+            string yazildi = Export(ds, 2);
 
             ev.WriteEntry(dtBas.Year.ToString() + "-" + dtBas.Month.ToString() + (yazildi != "" ? " Peker Gıda stok verisi gönderildi." : " Peker Gıda stok verisi gönderilemedi."), EventLogEntryType.Information);
 
@@ -501,7 +514,7 @@ namespace Sultanlar.ClassLib
             ayad = "AY";
             basay = dtBas.Month;
             bitay = dtBit.Month;
-            string yazildi = Export(ds, true);
+            string yazildi = Export(ds, 1);
 
             ev.WriteEntry(dtBas.Year.ToString() + "-" + dtBas.Month.ToString() + (yazildi != "" ? " Yılmaz meşrubat satış verisi gönderildi." : " Yılmaz meşrubat satış verisi gönderilemedi."), EventLogEntryType.Information);
 
@@ -575,7 +588,7 @@ namespace Sultanlar.ClassLib
             ayad = "AY";
             basay = dtBas.Month;
             bitay = dtBit.Month;
-            string yazildi = Export(ds, false);
+            string yazildi = Export(ds, 2);
 
             ev.WriteEntry(dtBas.Year.ToString() + "-" + dtBas.Month.ToString() + (yazildi != "" ? " Yılmaz Meşrubat stok verisi gönderildi." : " Yılmaz Meşrubat stok verisi gönderilemedi."), EventLogEntryType.Information);
 
@@ -618,8 +631,13 @@ namespace Sultanlar.ClassLib
             return result;
         }
         #endregion
-
-        public string Export(DataSet ds, bool satis)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ds"></param>
+        /// <param name="tur">1: satis, 2: stok, 3: cari</param>
+        /// <returns></returns>
+        public string Export(DataSet ds, int tur)
         {
             try
             {
@@ -628,22 +646,22 @@ namespace Sultanlar.ClassLib
                 if (https)
                 {
                     wr = (HttpWebRequest)WebRequest.Create("https://www.ittihadteknoloji.com.tr/dis/bayiservis/SatisStok2/" + bayikod +
-                    "/" + (satis ? "Satis" : "Stok") +
-                    "/" + (satis ? yilad : "-") +
+                    "/" + (tur == 1 ? "Satis" : tur == 2 ? "Stok" : tur == 3 ? "Cari" : "") +
+                    "/" + (tur == 1 ? yilad : "-") +
                     "/" + basyil.ToString() +
                     "/" + bityil.ToString() +
-                    "/" + (satis ? ayad : "-") +
+                    "/" + (tur == 1 ? ayad : "-") +
                     "/" + basay.ToString() +
                     "/" + bitay.ToString());
                 }
                 else
                 {
                     wr = (HttpWebRequest)WebRequest.Create("http://www.ittihadteknoloji.com.tr/wcf/bayiservis.svc/web/Post2?bayikod=" + bayikod +
-                    "&satis=" + (satis ? "Satis" : "Stok") +
-                    "&yilad=" + (satis ? yilad : "") +
+                    "&satis=" + (tur == 1 ? "Satis" : tur == 2 ? "Stok" : tur == 3 ? "Cari" : "") +
+                    "&yilad=" + (tur == 1 ? yilad : "") +
                     "&basyil=" + basyil.ToString() +
                     "&bityil=" + bityil.ToString() +
-                    "&ayad=" + (satis ? ayad : "") +
+                    "&ayad=" + (tur == 1 ? ayad : "") +
                     "&basay=" + basay.ToString() +
                     "&bitay=" + bitay.ToString());
                 }
@@ -667,7 +685,7 @@ namespace Sultanlar.ClassLib
             }
             catch (Exception ex)
             {
-                ev.WriteEntry((satis ? "Satış" : "Stok") + ": " + ex.Message, EventLogEntryType.Information);
+                ev.WriteEntry((tur == 1 ? "Satış" : tur == 2 ? "Stok" : tur == 3 ? "Cari" : "") + ": " + ex.Message, EventLogEntryType.Information);
                 return "";
             }
 

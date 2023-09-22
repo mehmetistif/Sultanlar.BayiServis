@@ -57,6 +57,7 @@ namespace Sultanlar.BayiWinApp
             textBox17.Text = new Class1(ev, "").Decrypt(config.GetElementsByTagName("password1")[0].InnerText);
             textBox6.Text = config.GetElementsByTagName("querySatis")[0].InnerText;
             textBox7.Text = config.GetElementsByTagName("queryStok")[0].InnerText;
+            txtCari.Text = config.GetElementsByTagName("queryCari").Count > 0 ? config.GetElementsByTagName("queryCari")[0].InnerText : "";
             textBox10.Text = config.GetElementsByTagName("yilad")[0].InnerText;
             textBox8.Text = config.GetElementsByTagName("yil")[0].InnerText;
             textBox11.Text = config.GetElementsByTagName("ayad")[0].InnerText;
@@ -74,6 +75,12 @@ namespace Sultanlar.BayiWinApp
                 radioButton2.Checked = true;
                 radioButton1.Checked = false;
             }
+
+            if (config.GetElementsByTagName("queryCari").Count == 0)
+            {
+                XmlElement xmlEl = config.CreateElement("queryCari");
+                config.DocumentElement.PrependChild(xmlEl);
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -89,6 +96,7 @@ namespace Sultanlar.BayiWinApp
             config.GetElementsByTagName("password1")[0].InnerText = new Class1(ev, "").Enrypt(textBox17.Text);
             config.GetElementsByTagName("querySatis")[0].InnerText = textBox6.Text.Trim();
             config.GetElementsByTagName("queryStok")[0].InnerText = textBox7.Text.Trim();
+            config.GetElementsByTagName("queryCari")[0].InnerText = txtCari.Text.Trim();
             config.GetElementsByTagName("yilad")[0].InnerText = textBox10.Text.Trim();
             config.GetElementsByTagName("yil")[0].InnerText = textBox8.Text.Trim();
             config.GetElementsByTagName("ayad")[0].InnerText = textBox11.Text.Trim();
@@ -217,20 +225,28 @@ namespace Sultanlar.BayiWinApp
         {
             string query = textBox6.Text.Trim();
             Class1 cls = new Class1(ev, textBox1.Text.Trim(), textBox2.Text.Trim(), textBox3.Text.Trim(), textBox4.Text.Trim(), textBox5.Text.Trim(),
-                textBox14.Text.Trim(), textBox15.Text.Trim(), textBox16.Text.Trim(), textBox17.Text.Trim(), query, textBox7.Text.Trim(),
+                textBox14.Text.Trim(), textBox15.Text.Trim(), textBox16.Text.Trim(), textBox17.Text.Trim(), query, textBox7.Text.Trim(), "",
                 textBox10.Text.Trim(), Convert.ToInt32(textBox8.Text.Trim()), Convert.ToInt32(textBox18.Text.Trim()), textBox11.Text.Trim(), Convert.ToInt32(textBox9.Text.Trim()), Convert.ToInt32(textBox13.Text.Trim()), checkBox1.Checked, radioButton1.Checked ? "sql" : "firebird");
-            MessageBox.Show(cls.GetData(true));
+            MessageBox.Show(cls.GetData(1));
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
             string query = textBox7.Text.Trim();
             Class1 cls = new Class1(ev, textBox1.Text.Trim(), textBox2.Text.Trim(), textBox3.Text.Trim(), textBox4.Text.Trim(), textBox5.Text.Trim(),
-                textBox14.Text.Trim(), textBox15.Text.Trim(), textBox16.Text.Trim(), textBox17.Text.Trim(), textBox6.Text.Trim(), query,
+                textBox14.Text.Trim(), textBox15.Text.Trim(), textBox16.Text.Trim(), textBox17.Text.Trim(), textBox6.Text.Trim(), query, "",
                 textBox10.Text.Trim(), Convert.ToInt32(textBox8.Text.Trim()), Convert.ToInt32(textBox18.Text.Trim()), textBox11.Text.Trim(), Convert.ToInt32(textBox9.Text.Trim()), Convert.ToInt32(textBox13.Text.Trim()), checkBox1.Checked, radioButton1.Checked ? "sql" : "firebird");
-            MessageBox.Show(cls.GetData(false));
+            MessageBox.Show(cls.GetData(2));
         }
 
+        private void button13_Click_1(object sender, EventArgs e)
+        {
+            string query = txtCari.Text.Trim();
+            Class1 cls = new Class1(ev, textBox1.Text.Trim(), textBox2.Text.Trim(), textBox3.Text.Trim(), textBox4.Text.Trim(), textBox5.Text.Trim(),
+                textBox14.Text.Trim(), textBox15.Text.Trim(), textBox16.Text.Trim(), textBox17.Text.Trim(), textBox6.Text.Trim(), textBox7.Text.Trim(), query,
+                textBox10.Text.Trim(), Convert.ToInt32(textBox8.Text.Trim()), Convert.ToInt32(textBox18.Text.Trim()), textBox11.Text.Trim(), Convert.ToInt32(textBox9.Text.Trim()), Convert.ToInt32(textBox13.Text.Trim()), checkBox1.Checked, radioButton1.Checked ? "sql" : "firebird");
+            MessageBox.Show(cls.GetData(3));
+        }
         private void button4_Click(object sender, EventArgs e)
         {
             Assembly assembly = Assembly.LoadFrom("Sultanlar.BayiWinServis.exe");
@@ -351,10 +367,10 @@ namespace Sultanlar.BayiWinApp
         {
             string query = textBox6.Text.Trim();
             Class1 cls = new Class1(ev, textBox1.Text.Trim(), textBox2.Text.Trim(), textBox3.Text.Trim(), textBox4.Text.Trim(), textBox5.Text.Trim(),
-                textBox14.Text.Trim(), textBox15.Text.Trim(), textBox16.Text.Trim(), textBox17.Text.Trim(), query, textBox7.Text.Trim(),
+                textBox14.Text.Trim(), textBox15.Text.Trim(), textBox16.Text.Trim(), textBox17.Text.Trim(), query, textBox7.Text.Trim(), txtCari.Text.Trim(),
                 textBox10.Text.Trim(), Convert.ToInt32(textBox8.Text.Trim()), Convert.ToInt32(textBox18.Text.Trim()), textBox11.Text.Trim(), Convert.ToInt32(textBox9.Text.Trim()), Convert.ToInt32(textBox13.Text.Trim()), checkBox1.Checked, radioButton1.Checked ? "sql" : "firebird");
             DataSet ds = new DataSet();
-            string sonuc = cls.GetDataFromSource(ds, true);
+            string sonuc = cls.GetDataFromSource(ds, 1);
             if (sonuc == "")
             {
                 Form2 frm = new Form2(ds);
@@ -370,10 +386,29 @@ namespace Sultanlar.BayiWinApp
         {
             string query = textBox7.Text.Trim();
             Class1 cls = new Class1(ev, textBox1.Text.Trim(), textBox2.Text.Trim(), textBox3.Text.Trim(), textBox4.Text.Trim(), textBox5.Text.Trim(),
-                textBox14.Text.Trim(), textBox15.Text.Trim(), textBox16.Text.Trim(), textBox17.Text.Trim(), textBox6.Text.Trim(), query,
+                textBox14.Text.Trim(), textBox15.Text.Trim(), textBox16.Text.Trim(), textBox17.Text.Trim(), textBox6.Text.Trim(), query, txtCari.Text.Trim(),
                 textBox10.Text.Trim(), Convert.ToInt32(textBox8.Text.Trim()), Convert.ToInt32(textBox18.Text.Trim()), textBox11.Text.Trim(), Convert.ToInt32(textBox9.Text.Trim()), Convert.ToInt32(textBox13.Text.Trim()), checkBox1.Checked, radioButton1.Checked ? "sql" : "firebird");
             DataSet ds = new DataSet();
-            string sonuc = cls.GetDataFromSource(ds, false);
+            string sonuc = cls.GetDataFromSource(ds, 2);
+            if (sonuc == "")
+            {
+                Form2 frm = new Form2(ds);
+                frm.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show(sonuc);
+            }
+        }
+
+        private void btnCari_Click(object sender, EventArgs e)
+        {
+            string query = txtCari.Text.Trim();
+            Class1 cls = new Class1(ev, textBox1.Text.Trim(), textBox2.Text.Trim(), textBox3.Text.Trim(), textBox4.Text.Trim(), textBox5.Text.Trim(),
+                textBox14.Text.Trim(), textBox15.Text.Trim(), textBox16.Text.Trim(), textBox17.Text.Trim(), textBox6.Text.Trim(), textBox7.Text.Trim(), query,
+                textBox10.Text.Trim(), Convert.ToInt32(textBox8.Text.Trim()), Convert.ToInt32(textBox18.Text.Trim()), textBox11.Text.Trim(), Convert.ToInt32(textBox9.Text.Trim()), Convert.ToInt32(textBox13.Text.Trim()), checkBox1.Checked, radioButton1.Checked ? "sql" : "firebird");
+            DataSet ds = new DataSet();
+            string sonuc = cls.GetDataFromSource(ds, 3);
             if (sonuc == "")
             {
                 Form2 frm = new Form2(ds);
@@ -413,6 +448,18 @@ namespace Sultanlar.BayiWinApp
 
         private void button13_Click(object sender, EventArgs e)
         {
+
+        }
+
+        private void radioButton3_CheckedChanged(object sender, EventArgs e)
+        {
+            if (((RadioButton)sender).Checked)
+            {
+                textBox7.Visible = radioButton3.Checked;
+                button11.Visible = radioButton3.Checked;
+                txtCari.Visible = radioButton4.Checked;
+                btnCari.Visible = radioButton4.Checked;
+            }
         }
     }
 }
