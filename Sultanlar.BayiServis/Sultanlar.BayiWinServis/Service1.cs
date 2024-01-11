@@ -106,6 +106,12 @@ namespace Sultanlar.BayiWinServis
 
         private void Gonder()
         {
+            DateTime baslangic = DateTime.Now.AddMonths(-3);
+            DateTime bitis = DateTime.Now;
+            cls.BasYil = baslangic.Year;
+            cls.BasAy = baslangic.Month;
+            cls.BitYil = bitis.Year;
+            cls.BitAy = bitis.Month;
             string satis = cls.GetData(1);
             string stok = cls.GetData(2);
             string cari = queryCari != "" ? cls.GetData(3) : "";

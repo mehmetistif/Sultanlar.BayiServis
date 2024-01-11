@@ -37,6 +37,10 @@ namespace Sultanlar.ClassLib
         private int bitay;
         private bool https;
         private string db;
+        public int BasYil { get { return basyil; } set { basyil = value; } }
+        public int BitYil { get { return bityil; } set { bityil = value; } }
+        public int BasAy { get { return basay; } set { basay = value; } }
+        public int BitAy { get { return bitay; } set { bitay = value; } }
 
         public Class1(EventLog Ev, string Bayikod)
         {
@@ -545,8 +549,8 @@ namespace Sultanlar.ClassLib
                          ""filters"":[{ ""field"": ""marka"", ""operator"": ""IN"", ""value"": ""BANDUFF,SULTANLAR""}],
                          ""sorts"": [],
                          ""params"": {
-                            ""_key"": 4597817,
-	                        ""_key_sis_depo_filtre"": 0,
+                            ""_key"": 0,
+	                        ""_key_sis_depo_filtre"": 1165932,
 	                        ""tarih"": ""2099-12-31"",
                             ""selectedcolumns"": [""aciklama"", ""stokkartkodu"", ""fiili_stok"", ""fiili_stok_irs"", ""gercek_stok"", ""gercek_stok_fat"", ""gercek_stok_irs"", ""b2c_depomiktari"", ""b2b_depomiktari""]
 	                     },
