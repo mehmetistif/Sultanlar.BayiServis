@@ -31,25 +31,30 @@ namespace Sultanlar.WinServis
             tmr.Elapsed += Tmr_Elapsed;
             tmr.Enabled = true;
             tmr.Start();
+            Yap();
         }
 
         private void Tmr_Elapsed(object sender, ElapsedEventArgs e)
         {
             if (DateTime.Now.Hour == 10 || DateTime.Now.Hour == 12 || DateTime.Now.Hour == 14 || DateTime.Now.Hour == 16 || DateTime.Now.Hour == 18 || DateTime.Now.Hour == 20)
             {
-                /*Class1 cls = new Class1(ev, "1071593");
-                cls.KaanGonder();
-                cls.KaanStokGonder();*/
-
-
-                Class1 cls1 = new Class1(ev, "1052689");
-                cls1.PekerGonder();
-                cls1.PekerStokGonder();
-
-                Class1 cls = new Class1(ev, "1018538");
-                cls.YilmazGonder();
-                cls.YilmazStokGonder();
+                Yap();
             }
+        }
+
+        private void Yap()
+        {
+            /*Class1 cls = new Class1(ev, "1071593");
+            cls.KaanGonder();
+            cls.KaanStokGonder();*/
+
+            Class1 cls1 = new Class1(ev, "1052689");
+            cls1.PekerGonder();
+            cls1.PekerStokGonder();
+
+            //Class1 cls = new Class1(ev, "1018538");
+            //cls.YilmazGonder();
+            //cls.YilmazStokGonder();
         }
 
         protected override void OnStop()
