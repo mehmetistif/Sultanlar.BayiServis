@@ -482,7 +482,7 @@ namespace Sultanlar.ClassLib
                 {""scf_fatura_listele_ayrintili"" :
                     {""session_id"": """ + YilmazSession() + @""",
                      ""firma_kodu"": 1,
-                     ""donem_kodu"": 3,
+                     ""donem_kodu"": 4,
                      ""filters"":[{""field"": ""stokkartmarka"", ""operator"": ""IN"", ""value"": ""BANDUFF,SULTANLAR""},{ ""field"": ""tarih"", ""operator"": "">="", ""value"": """ + dtBas.Year.ToString() + @"-" + (dtBas.Month.ToString().Length == 1 ? "0" : "") + dtBas.Month.ToString() + @"-01 00:00:00.00""}],
                      ""sorts"": """",
                      ""params"": {
@@ -614,7 +614,7 @@ namespace Sultanlar.ClassLib
                 {""login"" :
                     {
                        ""username"": ""ws-ym"",
-                       ""password"": ""Ym123456."",
+                       ""password"": ""ws*--yl999"",
                        ""disconnect_same_user"": true,
                        ""params"": { ""apikey"": ""d7283da0-d7db-4294-9bd7-9786892ee005""}
                     }

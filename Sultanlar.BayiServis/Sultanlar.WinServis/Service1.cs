@@ -52,9 +52,9 @@ namespace Sultanlar.WinServis
             cls1.PekerGonder();
             cls1.PekerStokGonder();
 
-            //Class1 cls = new Class1(ev, "1018538");
-            //cls.YilmazGonder();
-            //cls.YilmazStokGonder();
+            Class1 cls = new Class1(ev, "1018538");
+            cls.YilmazGonder();
+            cls.YilmazStokGonder();
         }
 
         protected override void OnStop()
