@@ -81,6 +81,8 @@ namespace Sultanlar.BayiWinServis
             tmr.Elapsed += Tmr_Elapsed;
             tmr.Enabled = true;
             tmr.Start();
+
+            Gonder();
         }
 
         private void Tmr_Elapsed(object sender, ElapsedEventArgs e)
