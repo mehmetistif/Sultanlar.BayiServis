@@ -609,14 +609,14 @@ namespace Sultanlar.ClassLib
             using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
             {
 
-                // SESSION ID MANUEL YAZILMALI
+                // SESSION ID MANUEL YAZILMALI d7283da0-d7db-4294-9bd7-9786892ee005
                 string jsonWS = @"
                 {""login"" :
                     {
-                       ""username"": ""ws-ym"",
-                       ""password"": ""ws*--yl999"",
+                       ""username"": ""ws-1"",
+                       ""password"": ""1234"",
                        ""disconnect_same_user"": true,
-                       ""params"": { ""apikey"": ""d7283da0-d7db-4294-9bd7-9786892ee005""}
+                       ""params"": { ""apikey"": ""8a2d19c4-90c6-40ee-9f62-7f650155bfac""}
                     }
                 }";
 
