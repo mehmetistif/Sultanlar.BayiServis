@@ -307,7 +307,7 @@ namespace Sultanlar.ClassLib
                 {""scf_fatura_listele_ayrintili"" :
                     {""session_id"": """ + PekerSession() + @""",
                      ""firma_kodu"": 1,
-                     ""donem_kodu"": 9,
+                     ""donem_kodu"": 10,
                      ""filters"":[{""field"": ""kartozelkodu2"", ""operator"": ""IN"", ""value"": ""SULTANLAR GRUP,BANDUFF""},{ ""field"": ""tarih"", ""operator"": "">="", ""value"": """ + dtBas.Year.ToString() + @"-" + (dtBas.Month.ToString().Length == 1 ? "0" : "") + dtBas.Month.ToString() + @"-01 00:00:00.00""}],
                      ""sorts"": """",
                      ""params"": {
@@ -370,7 +370,7 @@ namespace Sultanlar.ClassLib
                     {
                          ""session_id"": """ + PekerSession() + @""",
                          ""firma_kodu"": 1,
-                         ""donem_kodu"": 7,
+                         ""donem_kodu"": 10,
                          ""filters"":[{ ""field"": ""ozelkod2kodu"", ""operator"": ""IN"", ""value"": ""SULTANLAR GRUP,BANDUFF""}],
                          ""sorts"": [],
                          ""params"": {
@@ -482,7 +482,7 @@ namespace Sultanlar.ClassLib
                 {""scf_fatura_listele_ayrintili"" :
                     {""session_id"": """ + YilmazSession() + @""",
                      ""firma_kodu"": 1,
-                     ""donem_kodu"": 4,
+                     ""donem_kodu"": 5,
                      ""filters"":[{""field"": ""stokkartmarka"", ""operator"": ""IN"", ""value"": ""BANDUFF,SULTANLAR""},{ ""field"": ""tarih"", ""operator"": "">="", ""value"": """ + dtBas.Year.ToString() + @"-" + (dtBas.Month.ToString().Length == 1 ? "0" : "") + dtBas.Month.ToString() + @"-01 00:00:00.00""}],
                      ""sorts"": """",
                      ""params"": {
@@ -545,7 +545,7 @@ namespace Sultanlar.ClassLib
                     {
                          ""session_id"": """ + YilmazSession() + @""",
                          ""firma_kodu"": 1,
-                         ""donem_kodu"": 3,
+                         ""donem_kodu"": 5,
                          ""filters"":[{ ""field"": ""marka"", ""operator"": ""IN"", ""value"": ""BANDUFF,SULTANLAR""}],
                          ""sorts"": [],
                          ""params"": {
