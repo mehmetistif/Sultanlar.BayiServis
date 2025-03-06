@@ -290,7 +290,7 @@ namespace Sultanlar.ClassLib
         public bool PekerGonder()
         {
             //int ikiayonce = DateTime.Now.AddMonths(-3).Month;
-            DateTime dtBas = DateTime.Now.AddMonths(-3); //Convert.ToDateTime(DateTime.Now.Year.ToString() + "." + (ikiayonce < 1 ? "1" : ikiayonce.ToString()) + ".1");
+            DateTime dtBas = DateTime.Now.AddMonths(-2); //Convert.ToDateTime(DateTime.Now.Year.ToString() + "." + (ikiayonce < 1 ? "1" : ikiayonce.ToString()) + ".1");
             DateTime dtBit = DateTime.Now;
 
             //string AY = dtBas.Month.ToString().Length == 1 ? "0" + dtBas.Month.ToString() : dtBas.Month.ToString();
@@ -352,7 +352,7 @@ namespace Sultanlar.ClassLib
         public bool PekerStokGonder()
         {
             //int ikiayonce = DateTime.Now.AddMonths(-3).Month;
-            DateTime dtBas = DateTime.Now.AddMonths(-3); //Convert.ToDateTime(DateTime.Now.Year.ToString() + "." + (ikiayonce < 1 ? "1" : ikiayonce.ToString()) + ".1");
+            DateTime dtBas = DateTime.Now.AddMonths(-2); //Convert.ToDateTime(DateTime.Now.Year.ToString() + "." + (ikiayonce < 1 ? "1" : ikiayonce.ToString()) + ".1");
             DateTime dtBit = DateTime.Now;
 
             //string AY = dtBas.Month.ToString().Length == 1 ? "0" + dtBas.Month.ToString() : dtBas.Month.ToString();
@@ -465,7 +465,7 @@ namespace Sultanlar.ClassLib
         public bool YilmazGonder()
         {
             //int ikiayonce = DateTime.Now.AddMonths(-3).Month;
-            DateTime dtBas = DateTime.Now.AddMonths(-3); //Convert.ToDateTime(DateTime.Now.Year.ToString() + "." + (ikiayonce < 1 ? "1" : ikiayonce.ToString()) + ".1");
+            DateTime dtBas = DateTime.Now.AddMonths(-2); //Convert.ToDateTime(DateTime.Now.Year.ToString() + "." + (ikiayonce < 1 ? "1" : ikiayonce.ToString()) + ".1");
             DateTime dtBit = DateTime.Now;
 
             //string AY = dtBas.Month.ToString().Length == 1 ? "0" + dtBas.Month.ToString() : dtBas.Month.ToString();
@@ -527,7 +527,7 @@ namespace Sultanlar.ClassLib
         public bool YilmazStokGonder()
         {
             //int ikiayonce = DateTime.Now.AddMonths(-3).Month;
-            DateTime dtBas = DateTime.Now.AddMonths(-3); //Convert.ToDateTime(DateTime.Now.Year.ToString() + "." + (ikiayonce < 1 ? "1" : ikiayonce.ToString()) + ".1");
+            DateTime dtBas = DateTime.Now.AddMonths(-2); //Convert.ToDateTime(DateTime.Now.Year.ToString() + "." + (ikiayonce < 1 ? "1" : ikiayonce.ToString()) + ".1");
             DateTime dtBit = DateTime.Now;
 
             //string AY = dtBas.Month.ToString().Length == 1 ? "0" + dtBas.Month.ToString() : dtBas.Month.ToString();
